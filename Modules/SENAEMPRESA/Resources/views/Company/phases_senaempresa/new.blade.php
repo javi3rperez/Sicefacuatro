@@ -8,8 +8,9 @@
                     <div class="card-header">{{ $title }}</div>
 
                     <div class="card-body">
-                        <form action="{{ route('company.senaempresa.senaempresa_new') }}" method="POST"
-                            enctype="multipart/form-data">
+                        <form
+                            action="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.phases.saved') }}"
+                            method="POST" id="form-element" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="name" class="form-label">{{ trans('senaempresa::menu.Name') }}</label>
@@ -33,7 +34,7 @@
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-success">{{ trans('senaempresa::menu.Add') }}</button>
-                            <a href="{{ route('company.senaempresa.senaempresa') }}"
+                            <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.phases.index') }}"
                                 class="btn btn-danger btn-xl">{{ trans('senaempresa::menu.Cancel') }}</a>
                         </form>
                     </div>

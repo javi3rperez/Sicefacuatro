@@ -2,9 +2,7 @@
 
 @section('content')
     <div class="container">
-
-        <h1 class="text-center"><strong><em><span>{{ trans('senaempresa::menu.Positions') }}</span></em></strong>
-        </h1>
+        <h1 class="text-center"><strong><em><span>{{ $title }}</span></em></strong></h1>
         <br>
         <div class="col-md-12">
             <div class="card card-primary card-outline shadow">
@@ -12,40 +10,39 @@
                     <table id="datatable" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>{{ trans('senaempresa::menu.Id') }}</th>
+                                <th>Id</th>
                                 <th>{{ trans('senaempresa::menu.Name') }}</th>
                                 <th>{{ trans('senaempresa::menu.Description') }}</th>
-                                <th>{{ trans('senaempresa::menu.Status') }}</th>
+                                <th>{{ trans('senaempresa::menu.Quarter') }}</th>
                                 @if (Auth::check() && Auth::user()->roles[0]->name === 'Administrador Senaempresa')
-                                    <th style="width: 100px;">
-                                        <a href="{{ route('company.position.nuevo_cargo') }}"
+                                    <th>
+                                        <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.phases.new') }}"
                                             class="btn btn-success btn-sm"><i class="fas fa-user-plus"></i></a>
                                     </th>
                                 @endif
-
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($position_companies as $PositionCompany)
+                            @foreach ($senaempresas as $senaempresa)
                                 <tr>
-                                    <td>{{ $PositionCompany->id }}</td>
-                                    <td>{{ $PositionCompany->name }}</td>
-                                    <td>{{ $PositionCompany->description }}</td>
-                                    <td>{{ $PositionCompany->state }}</td>
+                                    <td>{{ $senaempresa->id }}</td>
+                                    <td>{{ $senaempresa->name }}</td>
+                                    <td>{{ $senaempresa->description }}</td>
+                                    <td>{{ $senaempresa->quarter->name }}</td>
                                     @if (Auth::check() && Auth::user()->roles[0]->name === 'Administrador Senaempresa')
-                                        <form action="{{ route('company.position.eliminar_cargo', $PositionCompany->id) }}"
-                                            method="POST" class="formCargo">
+                                        <form
+                                            action="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.phases.delete', $senaempresa->id) }}"
+                                            method="POST" class="formsena">
                                             @csrf
                                             @method('DELETE')
                                             <td>
-                                                <a href="{{ route('company.position.editar_cargo', ['id' => $PositionCompany->id]) }}"
+                                                <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.phases.edit', ['id' => $senaempresa->id]) }}"
                                                     class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
-
                                                 <button type="submit" class="btn btn-danger btn-sm"><i
                                                         class="fas fa-trash-alt"></i></button>
                                         </form>
+                                        </td>
                                     @endif
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -55,13 +52,12 @@
         </div>
     </div>
 @endsection
-
 <!--scripts utilizados para procesos-->
 @section('scripts')
     <script>
         'use strict';
         // Selecciona todos los formularios con la clase "formEliminar"
-        var forms = document.querySelectorAll('.formCargo');
+        var forms = document.querySelectorAll('.formsena');
 
         Array.prototype.slice.call(forms)
             .forEach(function(form) {
@@ -69,14 +65,14 @@
                     event.preventDefault(); // Evita que el formulario se envíe de inmediato
 
                     Swal.fire({
-                        title: "{{ trans('senaempresa::menu.Are you sure?') }}",
-                        text: "{{ trans('senaempresa::menu.It is an irreversible process.') }}",
+                        title: '{{ trans('senaempresa::menu.Are you sure?') }}',
+                        text: '{{ trans('senaempresa::menu.It is an irreversible process.') }}',
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: "{{ trans('senaempresa::menu.Yes, delete it') }}",
-                        cancelButtonText: "{{ trans('senaempresa::menu.Cancel') }}" // Cambiar el texto del botón "Cancelar"
+                        confirmButtonText: '{{ trans('senaempresa::menu.Yes, delete it') }}',
+                        cancelButtonText: '{{ trans('senaempresa::menu.Cancel') }}' // Cambiar el texto del botón "Cancelar"
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario usando AJAX
@@ -85,7 +81,7 @@
                                     // Manejar la respuesta JSON del servidor
                                     if (response.data && response.data.mensaje) {
                                         Swal.fire({
-                                            title: '{{ trans('senaempresa::menu.Position deleted!') }}',
+                                            title: '{{ trans('senaempresa::menu.SenaEmpresa deleted!') }}',
                                             text: response.data.mensaje,
                                             icon: 'success'
                                         }).then(() => {

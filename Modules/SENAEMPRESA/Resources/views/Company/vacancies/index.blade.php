@@ -5,6 +5,7 @@
         .modal-backdrop {
             background-color: rgba(0, 0, 0, 0.6);
         }
+
         /* Estilo del modal */
         .modal-content {
             background-color: #fff;
@@ -24,17 +25,18 @@
             border-bottom: none;
             /* Quita el borde inferior del encabezado */
         }
+
         /* Estilo del cuerpo del modal */
         .modal-body {
             padding: 20px;
             /* Añade espacio interno al cuerpo del modal */
         }
+
         /* Estilo del título del modal */
         .modal-title {
             color: #fff;
             /* Cambia el color del título del modal */
         }
-
     </style>
 @endsection
 @section('content')
@@ -43,7 +45,8 @@
         @if (Auth::check() &&
                 (Auth::user()->roles[0]->name === 'Administrador Senaempresa' ||
                     Auth::user()->roles[0]->name === 'Pasante Senaempresa'))
-            <form method="GET" action="{{ route('company.vacant.vacantes') }}">
+            <form method="GET"
+                action="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.vacancies.index') }}">
                 <label for="senaempresaFilter">{{ trans('senaempresa::menu.Filter by senaempresa') }}:</label>
                 <select class="form-control" id="senaempresaFilter" name="senaempresaFilter" onchange="this.form.submit()">
                     <option value="" {{ !$selectedSenaempresaId ? 'selected' : '' }}>
@@ -71,7 +74,8 @@
                                 <th>{{ trans('senaempresa::menu.Status') }}</th>
                                 <th class="text-center">{{ trans('senaempresa::menu.Details') }}</th>
                                 @if (Auth::check() && Auth::user()->roles[0]->name === 'Administrador Senaempresa')
-                                    <th style="width: 100px;"><a href="{{ route('company.vacant.agregar_vacante') }}"
+                                    <th style="width: 100px;"><a
+                                            href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.vacancies.new') }}"
                                             class="btn btn-success btn-sm"><i class="fas fa-user-plus"></i></a>
                                     </th>
                                 @endif
@@ -104,21 +108,21 @@
                                                 <i class="fas fa-eye" style="color: #000000;"></i>
                                             </a>
                                             @if (auth()->user()->person->apprentices())
-                                            <a href="{{ route('inscription', ['vacancy_id' => $vacancy->id]) }}">
-                                                <i class="fas fa-user-plus" style="color: #000000;"></i>
-                                            </a>
-                                            
+                                                <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.vacancies.inscription', ['vacancy_id' => $vacancy->id]) }}"
+                                                    title="Inscripción">
+                                                    <i class="fas fa-user-plus" style="color: #000000;"></i>
+                                                </a>
                                             @endif
                                         </td>
 
                                         @if (Auth::check() && Auth::user()->roles[0]->name === 'Administrador Senaempresa')
                                             <form class="formEliminar"
-                                                action="{{ route('company.vacant.eliminar_vacante', $vacancy->id) }}"
+                                                action="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.vacancies.delete', $vacancy->id) }}"
                                                 method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <td>
-                                                    <a href="{{ route('company.vacant.editar_vacante', ['id' => $vacancy->id]) }}"
+                                                    <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.vacancies.edit', ['id' => $vacancy->id]) }}"
                                                         class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                                     <button type="submit" class="btn btn-danger btn-sm"><i
                                                             class="fas fa-trash-alt"></i></button>

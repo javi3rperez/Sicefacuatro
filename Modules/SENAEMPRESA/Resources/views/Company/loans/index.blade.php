@@ -13,7 +13,8 @@
                 (Auth::user()->roles[0]->name === 'Administrador Senaempresa' ||
                     Auth::user()->roles[0]->name === 'Pasante Senaempresa'))
             <div class="col-md-3">
-                <form action="{{ route('company.loan.prestamos') }}" method="GET">
+                <form action="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.loans.index') }}"
+                    method="GET">
                     <div class="form-group">
                         <label for="loan_state">{{ trans('senaempresa::menu.Filter by State') }}:</label>
                         <select name="loan_state" id="loan_state" class="form-control" onchange="this.form.submit()">
@@ -47,8 +48,8 @@
                                             (Auth::user()->roles[0]->name === 'Administrador Senaempresa' ||
                                                 Auth::user()->roles[0]->name === 'Pasante Senaempresa'))
                                         <th>
-                                            <a href="{{ route('company.loan.Nuevo') }}" class="btn btn-success btn-sm"><i
-                                                    class="fas fa-user-plus"></i></a>
+                                            <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.loans.new') }}"
+                                                class="btn btn-success btn-sm"><i class="fas fa-user-plus"></i></a>
                                         </th>
                                     @endif
                                 </tr>
@@ -82,7 +83,7 @@
                                                                 $endDatetime = \Carbon\Carbon::parse($loan->end_datetime);
                                                                 $startDatetime = \Carbon\Carbon::parse($loan->start_datetime);
                                                             @endphp
-    
+
                                                             @if (
                                                                 $endDatetime->toDateString() !== $startDatetime->toDateString() ||
                                                                     ($endDatetime->hour >= 16 && $endDatetime->minute > 0))
@@ -99,7 +100,7 @@
                                                             @php
                                                                 $endDatetime = \Carbon\Carbon::parse($loan->end_datetime);
                                                             @endphp
-    
+
                                                             @if (
                                                                 $endDatetime->toDateString() !== $startDatetime->toDateString() ||
                                                                     ($endDatetime->hour >= 16 && $endDatetime->minute > 0))
@@ -170,9 +171,9 @@
                                                 </td>
                                                 @if ($loan->state === 'Prestado')
                                                     <td>
-                                                        <a href="{{ route('company.loan.devolver_prestamo', ['id' => $loan->id]) }}"
+                                                        <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.loans.return', ['id' => $loan->id]) }}"
                                                             class="btn btn-primary btn-sm">{{ trans('senaempresa::menu.Return') }}</a>
-                                                        <a href="{{ route('company.loan.editar', ['id' => $loan->id]) }}"
+                                                        <a href="{{ route('senaempresa.' . getRoleRouteName(Route::currentRouteName()) . '.loans.edit', ['id' => $loan->id]) }}"
                                                             class="btn btn-info btn-sm"><i class="fas fa-edit"></i></a>
                                                     </td>
                                                 @elseif ($loan->state === 'Devuelto')
