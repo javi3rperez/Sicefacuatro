@@ -19,8 +19,8 @@ Route::middleware(['lang'])->group(function () {
     Route::prefix('senaempresa')->group(function () {
 
         //RUTAS COMO USUARIO
-        Route::prefix('usuario')->group(function () {
-            Route::get('/', 'SENAEMPRESAController@Usuario')->name('senaempresa.usuario.index');
+        Route::prefix('apprentice')->group(function () {
+            Route::get('/', 'SENAEMPRESAController@Apprentice')->name('senaempresa.apprentice.index');
         });
     });
 });
