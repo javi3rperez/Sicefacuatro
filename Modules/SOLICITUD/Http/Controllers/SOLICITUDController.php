@@ -16,6 +16,20 @@ class SOLICITUDController extends Controller
     {
         return view('solicitud::index');
     }
+    public function welcome()
+    {
+        return view('solicitud::welcome');
+    }
+    public function admin()
+    {
+        return view('solicitud::admin');
+    }
+
+    public function store()
+    {
+        return view('solicitud::store');
+    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -31,10 +45,7 @@ class SOLICITUDController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    
 
     /**
      * Show the specified resource.
@@ -76,4 +87,4 @@ class SOLICITUDController extends Controller
     {
         //
     }
-}
+};

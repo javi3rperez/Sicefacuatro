@@ -1,4 +1,4 @@
-@extends('solicitud::layouts.master')
+@extends('solicitud::layouts.masterusers')
 
 @section('content')
     <h1>Hello World</h1>
