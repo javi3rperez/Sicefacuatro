@@ -16,46 +16,84 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        // Crear una lista de permisos para el rol 
-        $permissions_admin = []; // Lista de permisos para el rol de administrador
         
-        // Consultar aplicación SICA para registrar los roles
+
+        // Aqui comienza los permissions del rol de administrador
+        $permissions_admin = []; 
+       
         $app = App::where('name', 'SOLICITUD')->first();
 
-
-        // Vista de configuración (Administrador)
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.welcome'], [ // Registro o actualización de permiso
+       
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.welcome'], [ 
             'name' => 'Acceso al Rol de Administrador Solicitudes',
             'description' => 'Acceso al Rol de Administrador Solicitudes',
             'description_english' => 'Access to the Administrator Role',
             'app_id' => $app->id
         ]);
-        $permissions_admin[] = $permission->id; // Almacenar permiso para rol
-        // Consulta de ROLES
-        $rol_admin = Role::where('slug', 'solicitud.admin')->first(); // Rol Administrador
-        // Asignación de PERMISOS para los ROLES de la aplicación AGROSOFT (Sincronización de las relaciones sin eliminar las relaciones existentes)
+        //+
+        $permissions_admin[] = $permission->id; 
+        $rol_admin = Role::where('slug', 'solicitud.admin')->first();
         $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
 
 
-           // Crear una lista de permisos para el rol de instructor lider
-        $permissions_store = []; // Lista de permisos para el rol de instructor lider
+
+
+         // Aqui comienza los permissions del rol del Instructor lider  
+        $permissions_leader = []; 
                 
-           // Consultar aplicación SICA para registrar los roles
-           $app = App::where('name', 'SOLICITUD')->first();
-   
-           // Vista de configuración (Instructor lider)
-           $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.welcome'], [// Registro o actualización de permiso
+          
+        $app = App::where('name', 'SOLICITUD')->first();
+            
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.welcome'], [
                'name' => 'Acceso al Rol de instructor lider Solicitudes',
                'description' => 'Acceso al Rol de instructor lider',
                'description_english' => 'Access to the instructor lead Role',
                'app_id' => $app->id
            ]);
-           $permissions_store[] = $permission->id; // Almacenar permiso para rol
-           
-           // Consulta de ROLES
-           $rol_store = Role::where('slug','solicitud.store')->first(); // Rol Instructor lider
-           // Asignación de PERMISOS para los ROLES de la aplicación Solicitud (Sincronización de las relaciones sin eliminar las relaciones existentes)
-           $rol_store->permissions()->syncWithoutDetaching($permissions_store);
 
+        $permissions_leader[] = $permission->id; 
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
+
+
+
+
+
+            // Aqui comienza los permissions del rol de bodega 
+        $permissions_store = []; 
+                    
+          
+        $app = App::where('name', 'SOLICITUD')->first();
+    
+          
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.welcome'], [
+                'name' => 'Acceso al Rol de bodega Solicitudes',
+                'description' => 'Acceso al Rol de bodega',
+                'description_english' => 'Access to the store Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_store[] = $permission->id; 
+        $rol_store = Role::where('slug','solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store);
+
+
+
+
+            
+        // Aqui comienza los permissions del rol de instructor
+        $permissions_instructor = [];      
+            
+        $app = App::where('name', 'SOLICITUD')->first();
+    
+            
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.instructor.welcome'], [
+                'name' => 'Acceso al Rol de bodega Solicitudes',
+                'description' => 'Acceso al Rol de bodega',
+                'description_english' => 'Access to the store Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_instructor[] = $permission->id;  
+        $rol_instructor = Role::where('slug','solicitud.instructor')->first();
+        $rol_instructor->permissions()->syncWithoutDetaching($permissions_instructor);
     }
-}
+} 

@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class SOLICITUDController extends Controller
+class InventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,30 +14,14 @@ class SOLICITUDController extends Controller
      */
     public function index()
     {
-        return view('solicitud::index');
+          $inventory = [
+        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
+        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
+    ];
+
+        return view('ILider.inventory', compact('inventory'));
+        
     }
-    public function welcome()
-    {
-        return view('solicitud::welcome');
-    }
-    public function admin()
-    {
-        return view('solicitud::admin');
-    }
-    public function leader()
-    {
-        return view('solicitud::leader');
-    }
-    public function store()
-    {
-        return view('solicitud::store');
-    }
-    public function instructor()
-    {
-        return view('solicitud::instructor');
-    }
-    
-    
 
     /**
      * Show the form for creating a new resource.
@@ -53,7 +37,10 @@ class SOLICITUDController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    
+    public function store(Request $request)
+    {
+        //
+    }
 
     /**
      * Show the specified resource.
@@ -95,4 +82,4 @@ class SOLICITUDController extends Controller
     {
         //
     }
-};
+}

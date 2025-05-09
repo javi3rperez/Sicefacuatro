@@ -20,7 +20,7 @@ class PeopleTableSeeder extends Seeder
     $eps = EPS::firstOrCreate(['name' => 'NO REGISTRA']);
     $pension_entity = PensionEntity::firstOrCreate(['name' => 'NO REGISTRA']);
 
-    Person::firstOrCreate(['document_number' => '1079174115'],
+    Person::firstOrCreate(['document_number' => 1079174115],
     [
     'document_type' => 'Cedula Ciudadania',
     'first_name' => 'YONY JAVIER',
@@ -32,7 +32,31 @@ class PeopleTableSeeder extends Seeder
 
     ]);
 
-    Person::firstOrCreate(['document_number' => '1029641519'],
+    Person::firstOrCreate(['document_number' => 1079176912],
+    [
+    'document_type' => 'Tarjeta de Identidad',
+    'first_name' => 'LAURA MICHELLE',
+    'first_last_name' => 'PERDOMO',
+    'second_last_name' => 'ROJAS',
+    'eps_id' => $eps->id,
+    'population_group_id' => $population_group->id,
+    'pension_entity_id' => $pension_entity->id
+
+    ]);
+
+    Person::firstOrCreate(['document_number' => 1079176266],
+    [
+    'document_type' => 'Cedula Ciudadania',
+    'first_name' => 'DANNA SOFIA',
+    'first_last_name' => 'SANCHEZ',
+    'second_last_name' => 'DIAZ',
+    'eps_id' => $eps->id,
+    'population_group_id' => $population_group->id,
+    'pension_entity_id' => $pension_entity->id
+
+    ]);
+
+    Person::firstOrCreate(['document_number' => 1029641519],
     [
     'document_type' => 'Cedula Ciudadania',
     'first_name' => 'YULY NATALIA',

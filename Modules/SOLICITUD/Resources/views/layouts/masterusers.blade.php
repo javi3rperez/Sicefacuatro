@@ -18,11 +18,12 @@
     <!-- Custom styles -->
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #1a252f;
-            --accent-color: #218838;
+            --primary-color: #28a745;
+            --secondary-color: #218838;
+            --accent-color: #5cb85c;
             --light-color: #f8f9fa;
             --dark-color: #343a40;
+            --dark-green: #1e7e34;
         }
         
         body {
@@ -32,7 +33,7 @@
         }
         
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
             color: white;
@@ -68,23 +69,26 @@
         
         .feature-icon {
             font-size: 2.5rem;
-            color: var(--accent-color);
+            color: var(--primary-color);
             margin-bottom: 20px;
         }
         
         .btn-primary {
-            background-color: var(--accent-color);
-            border-color: #2980b9;
+            background-color: var(--primary-color);
+            border-color: var(--secondary-color);
             padding: 12px 30px;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
         
         .btn-primary:hover {
-            background-color: #2980b9;
-            border-color: #2980b9;
+            background-color: var(--dark-green);
+            border-color: var(--dark-green);
         }
         
+        .btn-outline-light:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
         footer {
             background-color: var(--dark-color);
             color: white;
@@ -166,11 +170,30 @@
                         </a>
                     </li>
                 @endif
+               
+                @if(checkRol('solicitud.leader'))
+                    <li class="nav-item">
+                        <a href="{{ route('solicitud.leader.welcome') }}" 
+                           class="nav-link @if(Route::is('solicitud.leader.*')) active @endif">
+                            <i class="fas fa-user-shield mr-1"></i>Instructor lider
+                        </a>
+                    </li>
+                @endif
+
                 @if(checkRol('solicitud.store'))
                     <li class="nav-item">
                         <a href="{{ route('solicitud.store.welcome') }}" 
                            class="nav-link @if(Route::is('solicitud.store.*')) active @endif">
-                            <i class="fas fa-user-shield mr-1"></i>Intructor
+                            <i class="fas fa-warehouse mr-1"></i>Bodeguero
+                        </a>
+                    </li>
+                @endif
+                
+                @if(checkRol('solicitud.instructor'))
+                    <li class="nav-item">
+                        <a href="{{ route('solicitud.instructor.welcome') }}" 
+                           class="nav-link @if(Route::is('solicitud.instructor.*')) active @endif">
+                            <i class="fas fa-user-tie mr-1"></i>Instructor
                         </a>
                     </li>
                 @endif
@@ -188,16 +211,12 @@
             </p>
             <div class="mt-4">
                 @auth
-                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
-                        <i class="fas fa-tachometer-alt mr-2"></i>Ir al Panel
-                    </a>
+                   
                 @else
                     <a href="{{ route('login') }}" class="btn btn-primary btn-lg mr-3">
                         <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                     </a>
-                    <a href="#" class="btn btn-outline-light btn-lg">
-                        <i class="fas fa-info-circle mr-2"></i>Más Información
-                    </a>
+                   
                 @endauth
             </div>
         </div>
@@ -288,7 +307,7 @@
             <div class="col-md-3">
                 <div class="stats-box">
                     <div class="stats-number">75%</div>
-                    <h4>Reducción en tiempos</h4>
+                    <h4>Reducción de tiempo</h4>
                     <p>De procesamiento de solicitudes</p>
                 </div>
             </div>
@@ -316,19 +335,7 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section text-center">
-        <div class="container">
-            <h2 class="mb-4">¿Listo para optimizar tu proceso de solicitudes?</h2>
-            <p class="lead mb-5">Únete a las organizaciones que ya están transformando su gestión de materiales</p>
-            <a href="{{ route('login') }}" class="btn btn-light btn-lg mr-3">
-                <i class="fas fa-play-circle mr-2"></i>Ver Demo
-            </a>
-            <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
-                <i class="fas fa-user-plus mr-2"></i>Registrarse
-            </a>
-        </div>
-    </section>
+
 
     <!-- Footer -->
     <footer class="text-center py-4">

@@ -21,6 +21,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
     <!-- Custom styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-bUGl5l+WrFj8h2QZBqzdrzzOyBGJgqEiXfRDAjC6M9uSNGBqZrG7KoQqxXONwbTuHYDlmJ8jthEnZz7j8P4X2g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --primary-color: #28a745;
@@ -136,7 +137,7 @@
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     
-                <a href="{{ route('login') }}" class="nav-link" style="color: var(--primary-color); font-weight: 600;">
+                <a href="#" class="nav-link" style="color: var(--primary-color); font-weight: 600;">
     <i class="fas fa-home nav-icon mr-1"></i>
 </a>
                 </li>
@@ -181,8 +182,14 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
                             <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                <i class="nav-icon fas fa-sign-in-alt" style="color: var(--primary-color);"></i>
-                                <p>Listado</p>
+                                <i class="nav-icon fas fa-boxes" style="color: var(--primary-color);"></i>
+                                <p>Inventario</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-plus-circle" style="color: var(--primary-color);"></i>
+                                <p>Crear Solicitud</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -190,23 +197,6 @@
                                 <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
                             </a>
-                            <ul class="nav nav-treeview" style="margin-left: 20px;">
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Inventario</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Solicitudes</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Reportes</span>
-                                    </a>
-                                </li>
-                            </ul>
                         </li>
                     </ul>
                 </nav>
