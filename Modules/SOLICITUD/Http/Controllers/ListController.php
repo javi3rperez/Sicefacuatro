@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class InventoryController extends Controller
+class ListController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,23 +14,19 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
-        ];
-
-        return view('ILider.inventory', compact('inventory'));
-        
+        return view('store.list', compact('list'));
     }
 
-    public function inventory_warehouseman()
+    public function list_warehouseman()
     {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
+        $list = [
+        ['id' => 1, 'Listado de Solicitud' => 'Herramienntas', 'Estado' => 'Aceptado'],
+        ['id' => 2, 'Listado de Solicitud' => 'Papeleria', 'Estado' => 'Aceptado'],
         ];
-        return view('solicitud::warehouseman.inventory_store', compact('inventory'));
+        
+        return view('solicitud::warehouseman.list_store', compact('list'));
     }
+
     /**
      * Show the form for creating a new resource.
      * @return Renderable

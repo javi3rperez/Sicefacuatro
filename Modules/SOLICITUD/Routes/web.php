@@ -1,6 +1,11 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use Modules\SOLICITUD\Http\Controllers\InventoryController;
+use Modules\SOLICITUD\Http\Controllers\ProductsController;
+use Modules\SOLICITUD\Http\Controllers\CategoriesController;
+use Modules\SOLICITUD\Http\Controllers\ListController;
+use Modules\SOLICITUD\Http\Controllers\LotsController;
+use Modules\SOLICITUD\Http\Controllers\EvidenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +29,12 @@ Route::middleware(['lang'])->group(function(){
         
         Route::get('/solicitud/ILider/inventory', [InventoryController::class, 'inventory'])->name('solicitud.ILider.inventory');
 
+        // ALMACENISTA
+        Route::get('/warehouseman/inventory', [InventoryController::class, 'inventory_warehouseman'])->name('solicitud.store.inventory');
+        Route::get('/warehouseman/products', [ProductsController::class, 'products_warehouseman'])->name('solicitud.store.products');
+        Route::get('/warehouseman/categories', [CategoriesController::class, 'categories_warehouseman'])->name('solicitud.store.categories');
+        Route::get('/warehouseman/list', [ListController::class, 'list_warehouseman'])->name('solicitud.store.list');
+        Route::get('/warehouseman/lots', [LotsController::class, 'lots_warehouseman'])->name('solicitud.store.lots');
+        Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
 });
 });

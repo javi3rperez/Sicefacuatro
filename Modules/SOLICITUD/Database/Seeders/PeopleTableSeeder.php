@@ -22,7 +22,7 @@ class PeopleTableSeeder extends Seeder
 
     Person::firstOrCreate(['document_number' => 1079174115],
     [
-    'document_type' => 'Cedula Ciudadania',
+    'document_type' => 'Cédula de ciudadanía',
     'first_name' => 'YONY JAVIER',
     'first_last_name' => 'PEREZ',
     'second_last_name' => 'TIMOTE',
@@ -34,7 +34,7 @@ class PeopleTableSeeder extends Seeder
 
     Person::firstOrCreate(['document_number' => 1079176912],
     [
-    'document_type' => 'Tarjeta de Identidad',
+    'document_type' => 'Cédula de ciudadanía',
     'first_name' => 'LAURA MICHELLE',
     'first_last_name' => 'PERDOMO',
     'second_last_name' => 'ROJAS',
@@ -46,7 +46,7 @@ class PeopleTableSeeder extends Seeder
 
     Person::firstOrCreate(['document_number' => 1079176266],
     [
-    'document_type' => 'Cedula Ciudadania',
+    'document_type' => 'Cédula de ciudadanía',
     'first_name' => 'DANNA SOFIA',
     'first_last_name' => 'SANCHEZ',
     'second_last_name' => 'DIAZ',
@@ -58,7 +58,7 @@ class PeopleTableSeeder extends Seeder
 
     Person::firstOrCreate(['document_number' => 1029641519],
     [
-    'document_type' => 'Cedula Ciudadania',
+    'document_type' => 'Cédula de ciudadanía',
     'first_name' => 'YULY NATALIA',
     'first_last_name' => 'FARFAN',
     'second_last_name' => 'RAMIREZ',

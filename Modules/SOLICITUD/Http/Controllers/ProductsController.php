@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class InventoryController extends Controller
+class ProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,30 +14,27 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
-        ];
 
-        return view('ILider.inventory', compact('inventory'));
-        
+        return view('store.products', compact('products'));
     }
 
-    public function inventory_warehouseman()
+    public function products_warehouseman()
     {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
+        $products = [
+        ['id' => 1, 'nombre' => 'Machete', 'descripcion' => 'Marca xx', 'categoria' => 10],
+        ['id' => 2, 'nombre' => 'Martillo', 'descripcion' => 'Chato', 'categoria' => 15],
         ];
-        return view('solicitud::warehouseman.inventory_store', compact('inventory'));
+        
+        return view('solicitud::warehouseman.products_store', compact('products'));
     }
+
     /**
      * Show the form for creating a new resource.
      * @return Renderable
      */
     public function create()
     {
-        return view('solicitud::create');
+        return view('solicitud::products.create');
     }
 
     /**
@@ -47,7 +44,15 @@ class InventoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validation and storage logic here
+        // Example:
+        // $product = new Product();
+        // $product->nombre = $request->nombre;
+        // $product->descripcion = $request->descripcion;
+        // $product->categoria = $request->categoria;
+        // $product->save();
+        
+        return redirect()->route('products.index');
     }
 
     /**
@@ -57,7 +62,8 @@ class InventoryController extends Controller
      */
     public function show($id)
     {
-        return view('solicitud::show');
+        // Find product by ID and pass to view
+        return view('solicitud::products.show');
     }
 
     /**
@@ -67,7 +73,8 @@ class InventoryController extends Controller
      */
     public function edit($id)
     {
-        return view('solicitud::edit');
+        // Find product by ID and pass to edit view
+        return view('solicitud::products.edit');
     }
 
     /**
@@ -78,7 +85,8 @@ class InventoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // Find product by ID and update
+        return redirect()->route('products.index');
     }
 
     /**
@@ -88,6 +96,8 @@ class InventoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Find product by ID and delete
+        return redirect()->route('products.index');
     }
+
 }

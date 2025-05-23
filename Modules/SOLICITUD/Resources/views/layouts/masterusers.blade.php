@@ -184,7 +184,7 @@
                     <li class="nav-item">
                         <a href="{{ route('solicitud.store.welcome') }}" 
                            class="nav-link @if(Route::is('solicitud.store.*')) active @endif">
-                            <i class="fas fa-warehouse mr-1"></i>Bodeguero
+                            <i class="fas fa-warehouse mr-1"></i>Almacenista
                         </a>
                     </li>
                 @endif

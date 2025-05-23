@@ -38,8 +38,8 @@ class RolesTableSeeder extends Seeder
 
         // Rol de bodega
         $rolstore = Role::updateOrCreate(['slug' => 'solicitud.store'], [ 
-            'name' => 'Bodega',
-            'description' => 'Rol bodega de la aplicación SOLICITUD',
+            'name' => 'Almacen',
+            'description' => 'Rol Almacen de la aplicación SOLICITUD',
             'description_english' => 'store role of the SOLICITUD application',
             'full_access' => 'No',
             'app_id' => $app->id,
