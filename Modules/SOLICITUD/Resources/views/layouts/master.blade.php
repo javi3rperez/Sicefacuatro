@@ -180,14 +180,14 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                <i class="nav-icon fas fa-sign-in-alt" style="color: var(--primary-color);"></i>
-                                <p>Listado</p>
-                            </a>
-                        </li>
+                <a href="#" class="nav-link" style="color: var(--dark-color);">
+                    <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
+                    <p>Listado</p>
+                </a>
+            </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
+                                 <i class="nav-icon fas fa-history" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
                             </a>
                             <ul class="nav nav-treeview" style="margin-left: 20px;">
@@ -198,7 +198,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Solicitudes</span>
+                                        <span class="menu-item-text">Solisscitudes</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
