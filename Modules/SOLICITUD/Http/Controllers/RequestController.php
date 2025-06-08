@@ -6,31 +6,17 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
-class InventoryController extends Controller
+class RequestController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function inventory_leader()
+    public function index()
     {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
-        ];
-
-        return view('solicitud::leader.inventory', compact('inventory'));
-        
+        return view('solicitud::index');
     }
 
-    public function inventory_warehouseman()
-    {
-        $inventory = [
-        ['id' => 1, 'lote' => 'Ferretería', 'categoria' => 'Herramientas', 'producto' => 'Machetes', 'cantidad' => 10],
-        ['id' => 2, 'lote' => 'Papelería', 'categoria' => 'Elementos de escritura', 'producto' => 'Marcadores', 'cantidad' => 15],
-        ];
-        return view('solicitud::warehouseman.inventory_store', compact('inventory'));
-    }
     /**
      * Show the form for creating a new resource.
      * @return Renderable
@@ -45,10 +31,23 @@ class InventoryController extends Controller
      * @param Request $request
      * @return Renderable
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function request_leader(Request $request)
+{
+    $validated = $request->validate([
+        'nombre' => 'required|string|max:255',
+        'programa' => 'required|string|max:255',
+        'lote' => 'required|string|max:255',
+        'producto' => 'required|string|max:255',
+        'cantidad' => 'required|integer|min:1'
+    ]);
+
+    Solicitud::create($validated);
+
+    return view('solicitud::leader.request', compact('request'));
+
+    /*return redirect()->back()->with('success', 'Solicitud enviada correctamente.');*/
+
+}
 
     /**
      * Show the specified resource.

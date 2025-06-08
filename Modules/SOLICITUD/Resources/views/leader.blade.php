@@ -9,7 +9,7 @@
             </div>
             <h1 class="display-4 font-weight-bold text-dark">¡Bienvenido!</h1>
             <hr class="w-50 mx-auto my-4">
-            <p class="lead text-secondary">Estás ingresando como <span class="text-success font-weight-bold">Instructor lider</span></p>
+            <p class="lead text-secondary">Estás ingresando como <span class="text-success font-weight-bold">Instructor Lider</span></p>
             </div>
     </div>
 </div>

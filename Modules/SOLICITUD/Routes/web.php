@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use Modules\SOLICITUD\Http\Controllers\InventoryController;
+use Modules\SOLICITUD\Http\Controllers\RequestController;
 use Modules\SOLICITUD\Http\Controllers\ProductsController;
 use Modules\SOLICITUD\Http\Controllers\CategoriesController;
 use Modules\SOLICITUD\Http\Controllers\ListController;
@@ -26,8 +27,11 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
     
         
-        
-        Route::get('/solicitud/ILider/inventory', [InventoryController::class, 'inventory'])->name('solicitud.ILider.inventory');
+        // INSTRUCTOR LIDER 
+        Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
+        Route::post('/leader/store', [RequestController::class, 'request_leader'])->name('solicitud.store.request');
+
+
 
         // ALMACENISTA
         Route::get('/warehouseman/inventory', [InventoryController::class, 'inventory_warehouseman'])->name('solicitud.store.inventory');

@@ -55,7 +55,27 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader = Role::where('slug','solicitud.leader')->first(); 
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
+        // Permiso para CRUD INVENTRIO ROL INSTRUCTOR LIDER
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.inventory'], [
+                'name' => 'Acceso al Rol de instructor lider para inventario',
+                'description' => 'Acceso al Rol de instructor lider',
+                'description_english' => 'Access to the instructor lead Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader); 
 
+        // Permiso para CRUD CREAR SOLICITUD ROL INSTRUCTOR LIDER
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.request'], [
+                'name' => 'Acceso al Rol de instructor lider para solicitud',
+                'description' => 'Acceso al Rol de instructor lider',
+                'description_english' => 'Access to the instructor lead Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
 
 
