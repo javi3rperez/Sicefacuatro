@@ -73,6 +73,12 @@
             <input type="number" name="cantidad" id="cantidad" class="form-control" required min="1">
         </div>
 
+        <!-- Campo de fecha -->
+        <div class="form-group">
+            <label for="fecha">Fecha</label>
+            <input type="date" name="fecha" id="fecha" class="form-control" required>
+        </div>
+
         <button type="submit" class="btn btn-success">Solicitar</button>
     </form>
 </div>

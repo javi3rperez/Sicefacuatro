@@ -59,7 +59,7 @@
     }
 
     .table td:nth-child(2) {
-        text-align: left; /* Alinear columna "Solicitudes" a la izquierda */
+        text-align: left;
     }
 
     .table td:not(:nth-child(2)) {
@@ -76,6 +76,7 @@
                 <option value="">Estado</option>
                 <option value="aceptada">Aceptadas</option>
                 <option value="rechazada">Rechazadas</option>
+                <option value="pendiente">Pendientes</option>
             </select>
         </div>
     </div>
@@ -85,28 +86,51 @@
             <tr>
                 <th>ID</th>
                 <th>Solicitudes</th>
+                <th>Fecha</th>
                 <th>Estado</th>
-                <th>Ver</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>1</td>
                 <td>Ferretería | Herramientas | Machetes | 10</td>
+                <td>2025-07-01</td>
                 <td style="color: gray;">Aceptada</td>
                 <td class="col-ver">
-                    <button class="btn btn-primary btn-sm">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn btn-warning btn-sm" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
             </tr>
             <tr>
                 <td>2</td>
                 <td>Papelería | Instrumentos de escritura | Marcadores | 15</td>
+                <td>2025-07-02</td>
                 <td style="color: gray;">Rechazada</td>
                 <td class="col-ver">
-                    <button class="btn btn-primary btn-sm">
-                        <i class="fas fa-eye"></i>
+                    <button class="btn btn-warning btn-sm" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Aseo | Desinfectantes | Cloro | 20</td>
+                <td>2025-07-05</td>
+                <td style="color: gray;">Pendiente</td>
+                <td class="col-ver">
+                    <button class="btn btn-warning btn-sm" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Eliminar">
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
             </tr>

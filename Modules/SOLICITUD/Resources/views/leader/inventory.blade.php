@@ -25,6 +25,11 @@
         display: flex;
         gap: 1rem;
     }
+    .form-control {
+    padding: 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
 
     .form-select {
         padding: 0.4rem;
@@ -64,24 +69,10 @@
                 <option value="Ferreteria">Ferretería</option>
                 <option value="Papeleria">Papelería</option>
                 <option value="Higiene">Higiene</option>
-                <option value="Insumos">Insumos</option>
             </select>
 
-            <select id="categoriaFiltro" class="form-select">
-                <option value="">Categorías</option>
-                <option value="Clavos">Clavos</option>
-                <option value="Tornillos">Tornillos</option>
-                <option value="Herramientas">Herramientas</option>
-                <option value="Cuadernos">Cuadernos</option>
-                <option value="Lápices">Lápices</option>
-                <option value="Marcadores">Marcadores</option>
-                <option value="Jabón">Jabón</option>
-                <option value="Cloro">Cloro</option>
-                <option value="Papel Higiénico">Papel Higiénico</option>
-                <option value="Bolsas">Bolsas</option>
-                <option value="Guantes">Guantes</option>
-                <option value="Cajas">Cajas</option>
-            </select>
+            <!-- Campo de fecha en lugar de categoría -->
+            <input type="date" id="fechaFiltro" class="form-control" value="{{ date('Y-m-d') }}">
         </div>
     </div>
 
@@ -90,19 +81,19 @@
             <tr>
                 <th>ID</th>
                 <th>Lotes</th>
-                <th>Categorías</th>
-                <th>Productos</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
+                <th>Fecha</th>
             </tr>
         </thead>
         <tbody id="inventarioBody">
             @foreach($inventory as $item)
-            <tr data-lote="{{ $item['lote'] }}" data-categoria="{{ $item['categoria'] }}">
+            <tr data-lote="{{ $item['lote'] }}" data-fecha="{{ $item['fecha'] }}">
                 <td>{{ $item['id'] }}</td>
                 <td>{{ $item['lote'] }}</td>
-                <td>{{ $item['categoria'] }}</td>
                 <td>{{ $item['producto'] }}</td>
                 <td>{{ $item['cantidad'] }}</td>
+                <td>{{ $item['fecha'] }}</td>
             </tr>
             @endforeach
         </tbody>
@@ -111,21 +102,21 @@
 
 <script>
     document.getElementById('loteFiltro').addEventListener('change', filtrarTabla);
-    document.getElementById('categoriaFiltro').addEventListener('change', filtrarTabla);
+    document.getElementById('fechaFiltro').addEventListener('change', filtrarTabla);
 
     function filtrarTabla() {
         const loteFiltro = document.getElementById('loteFiltro').value.toLowerCase();
-        const categoriaFiltro = document.getElementById('categoriaFiltro').value.toLowerCase();
+        const fechaFiltro = document.getElementById('fechaFiltro').value;
 
         const filas = document.querySelectorAll('#inventarioBody tr');
 
         filas.forEach(fila => {
             const lote = fila.getAttribute('data-lote').toLowerCase();
-            const categoria = fila.getAttribute('data-categoria').toLowerCase();
+            const fecha = fila.getAttribute('data-fecha');
 
             const mostrar =
                 (loteFiltro === "" || lote === loteFiltro) &&
-                (categoriaFiltro === "" || categoria === categoriaFiltro);
+                (fechaFiltro === "" || fecha === fechaFiltro);
 
             fila.style.display = mostrar ? "" : "none";
         });
