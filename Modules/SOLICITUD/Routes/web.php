@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Modules\SOLICITUD\Http\Controllers\InventoryController;
 use Modules\SOLICITUD\Http\Controllers\RequestController;
+use Modules\SOLICITUD\Http\Controllers\HistoryController;
 use Modules\SOLICITUD\Http\Controllers\ProductsController;
 use Modules\SOLICITUD\Http\Controllers\CategoriesController;
 use Modules\SOLICITUD\Http\Controllers\ListController;
@@ -29,8 +30,8 @@ Route::middleware(['lang'])->group(function(){
         
         // INSTRUCTOR LIDER 
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
-        Route::post('/leader/store', [RequestController::class, 'request_leader'])->name('solicitud.store.request');
-
+        Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
+        Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
 
 
         // ALMACENISTA

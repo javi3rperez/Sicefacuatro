@@ -67,7 +67,19 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader); 
 
         // Permiso para CRUD CREAR SOLICITUD ROL INSTRUCTOR LIDER
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.request'], [
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.create'], [
+                'name' => 'Acceso al Rol de instructor lider para solicitud',
+                'description' => 'Acceso al Rol de instructor lider',
+                'description_english' => 'Access to the instructor lead Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
+
+        // Permiso para CRUD HISTORIAL DE SOLICITUDES ROL INSTRUCTOR LIDER
+         // Permiso para CRUD CREAR SOLICITUD ROL INSTRUCTOR LIDER
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.index'], [
                 'name' => 'Acceso al Rol de instructor lider para solicitud',
                 'description' => 'Acceso al Rol de instructor lider',
                 'description_english' => 'Access to the instructor lead Role',

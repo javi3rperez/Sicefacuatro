@@ -137,7 +137,7 @@
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     
-                <a href="#" class="nav-link" style="color: var(--primary-color); font-weight: 600;">
+                <a href="{{ route('login') }}" class="nav-link" style="color: var(--primary-color); font-weight: 600;">
     <i class="fas fa-home nav-icon mr-1"></i>
 </a>
                 </li>
@@ -187,13 +187,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('solicitud.store.request') }}" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.leader.create') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-plus-circle" style="color: var(--primary-color);"></i>
                                 <p>Crear Solicitud</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.leader.index') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
                             </a>

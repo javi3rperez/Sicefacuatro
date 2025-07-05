@@ -46,7 +46,7 @@
 
 <div class="form-container">
     <h3>Solicitud</h3>
-    <form method="POST" action="{{ route('solicitud.store.request') }}">
+    <form method="GET" action="#">
         @csrf
         <div class="form-group">
             <label for="nombre">Nombre</label>
