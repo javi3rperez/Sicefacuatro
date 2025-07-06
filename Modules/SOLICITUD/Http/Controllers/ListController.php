@@ -3,8 +3,10 @@
 namespace Modules\SOLICITUD\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use Modules\SICA\Entities\Person;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\SOLICITUD\Entities\Request as Solicitud;
 
 class ListController extends Controller
 {
@@ -17,13 +19,23 @@ class ListController extends Controller
         return view('store.list', compact('list'));
     }
 
-    public function list_warehouseman()
+    // Agrega el parámetro Request $request aquí
+    public function list_warehouseman(Request $request)
     {
-        $list = [
-        ['id' => 1, 'Listado de Solicitud' => 'Herramienntas', 'Estado' => 'Aceptado'],
-        ['id' => 2, 'Listado de Solicitud' => 'Papeleria', 'Estado' => 'Aceptado'],
-        ];
+        $query = Solicitud::with(['person', 'productiveUnitWarehouse', 'movementType'])
+            ->where('status', 'approved') // Solo aprobadas
+            ->orderBy('required_date', 'desc');
         
+        if ($request->has('priority') && $request->priority != '') {
+            $query->where('priority', $request->priority);
+        }
+        
+        if ($request->has('date') && $request->date != '') {
+            $query->whereDate('request_date', $request->date);
+        }
+        
+        $list = $query->get();
+
         return view('solicitud::warehouseman.list_store', compact('list'));
     }
 

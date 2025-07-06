@@ -211,6 +211,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('solicitud.store.inventory') }}" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-boxes" style="color: var(--primary-color);"></i>
+                                <p>Movimientos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('solicitud.store.evidence') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-plus-circle" style="color: var(--primary-color);"></i>
                                 <p>Evidencia de Entrega</p>

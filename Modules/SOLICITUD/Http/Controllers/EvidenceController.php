@@ -5,6 +5,7 @@ namespace Modules\SOLICITUD\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\SOLICITUD\Entities\Evidence;
 
 class EvidenceController extends Controller
 {
@@ -17,13 +18,35 @@ class EvidenceController extends Controller
         return view('store.evidence', compact('evidence'));
     }
 
-        public function evidence_warehouseman()
+    public function evidence_warehouseman(Request $request)
     {
-        $evidence = [
-        ['id' => 1, 'Listado de Solicitud' => 'Herramienntas', 'Estado' => 'Aceptado'],
-        ['id' => 2, 'Listado de Solicitud' => 'Papeleria', 'Estado' => 'Aceptado'],
-        ];
-        
+        $query = Evidence::query()
+            ->select([
+                'id',
+                'lot_number',
+                'product_name',
+                'movement_type',
+                'evidence_path',
+                'user_name',
+                'created_at'
+            ])
+            ->orderBy('created_at', 'desc');
+
+        // Aplicar filtros
+        if ($request->filled('lot')) {
+            $query->where('lot_number', 'like', '%'.$request->lot.'%');
+        }
+
+        if ($request->filled('product')) {
+            $query->where('product_name', 'like', '%'.$request->product.'%');
+        }
+
+        if ($request->filled('movement_type')) {
+            $query->where('movement_type', $request->movement_type);
+        }
+
+        $evidence = $query->paginate(15);
+
         return view('solicitud::warehouseman.evidence_store', compact('evidence'));
     }
 
