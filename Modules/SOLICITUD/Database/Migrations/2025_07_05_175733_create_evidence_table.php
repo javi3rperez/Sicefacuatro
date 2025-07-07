@@ -8,39 +8,45 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        Schema::create('evidence', function (Blueprint $table) {
+        Schema::create('evidences', function (Blueprint $table) {
             $table->id(); // ID autoincremental
             
-            // Ruta de la imagen de evidencia (puede ser nulo temporalmente)
-            $table->string('evidence_path')->nullable();
+            // Clave foránea para categoría (asumiendo que existe una tabla categories)
+            $table->foreignId('category_id')
+                  ->constrained('categories')
+                  ->onDelete('cascade')
+                  ->comment('ID de la categoría asociada');
             
-            // Relación con la tabla de movimientos
-            $table->unsignedBigInteger('movement_id');
-            $table->foreign('movement_id')
-                  ->references('id')
-                  ->on('movements')
-                  ->onDelete('cascade'); // Eliminación en cascada
-                  
+            $table->string('product_name', 100)
+                  ->comment('Nombre del producto');
+            $table->enum('movement_type', ['entry', 'exit'])
+                  ->comment('Tipo de movimiento: entrada (entry) o salida (exit)');
+            
+            $table->string('evidence_path', 255)
+                  ->nullable()
+                  ->comment('Ruta del archivo de evidencia en el sistema de archivos');
+            
+            $table->text('comments')
+                  ->nullable()
+                  ->comment('Comentarios adicionales sobre la evidencia');
+            
             // Timestamps automáticos
             $table->timestamps();
             
-            // Índices para mejor performance
-            $table->index('movement_id');
+            // Índices para mejorar el rendimiento
+            $table->index('category_id');
+            $table->index('movement_type');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('evidence');
+        Schema::dropIfExists('evidences');
     }
 };

@@ -6,6 +6,8 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Evidence;
+use Illuminate\Support\Facades\DB;
+use Modules\SICA\Entities\Category;
 
 class EvidenceController extends Controller
 {
@@ -20,34 +22,19 @@ class EvidenceController extends Controller
 
     public function evidence_warehouseman(Request $request)
     {
-        $query = Evidence::query()
-            ->select([
-                'id',
-                'lot_number',
-                'product_name',
-                'movement_type',
-                'evidence_path',
-                'user_name',
-                'created_at'
-            ])
-            ->orderBy('created_at', 'desc');
 
-        // Aplicar filtros
-        if ($request->filled('lot')) {
-            $query->where('lot_number', 'like', '%'.$request->lot.'%');
-        }
 
-        if ($request->filled('product')) {
-            $query->where('product_name', 'like', '%'.$request->product.'%');
-        }
+            $evidence = DB::table('evidences')
+                ->join('categories', 'evidences.category_id', '=', 'categories.id')
+                ->select('evidences.*', 'categories.name as category_name')
+                ->when($request->input('category_id'), function ($query) use ($request) {
+                    return $query->where('evidences.category_id', $request->input('category_id'));
+                })
+                ->orderBy('evidences.created_at', 'desc')
+                ->paginate(10);
 
-        if ($request->filled('movement_type')) {
-            $query->where('movement_type', $request->movement_type);
-        }
-
-        $evidence = $query->paginate(15);
-
-        return view('solicitud::warehouseman.evidence_store', compact('evidence'));
+    
+        return view('solicitud::warehouseman.evidence_store', compact('evidence',));
     }
 
     /**
@@ -58,6 +45,8 @@ class EvidenceController extends Controller
     {
         return view('solicitud::create');
     }
+
+
 
     /**
      * Store a newly created resource in storage.

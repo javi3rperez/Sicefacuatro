@@ -41,5 +41,6 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseman/list', [ListController::class, 'list_warehouseman'])->name('solicitud.store.list');
         Route::get('/warehouseman/lots', [LotsController::class, 'lots_warehouseman'])->name('solicitud.store.lots');
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
+            
 });
 });
