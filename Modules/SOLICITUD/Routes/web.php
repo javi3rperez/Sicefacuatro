@@ -32,6 +32,7 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
         Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
         Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
+        Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
 
 
         // ALMACENISTA
