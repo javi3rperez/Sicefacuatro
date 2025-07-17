@@ -1,20 +1,20 @@
 @extends('solicitud::layouts.masterstore')
 
 @section('content')
-<br>
-
-<div class="container mt-4">
+<div class="container-fluid py-5">
+    <!-- Título principal y botón -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-success font-weight-bold">
-            <i class="fas fa-exchange-alt"></i> Movimientos de Inventario
+            <i class="fas fa-exchange-alt mr-2"></i> Movimientos de Inventario
         </h2>
-        <a href="" class="btn btn-success btn-lg shadow-sm">
-            <i class="fas fa-plus mr-2"></i>Nuevo Movimiento
-        </a>
+        <button class="btn btn-success" data-toggle="modal" data-target="#newMovementModal">
+            <i class="fas fa-plus mr-2"></i> Nuevo Movimiento
+        </button>
     </div>
 
+    <!-- Alertas -->
     @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show shadow-sm border-0">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm border-success">
             <div class="d-flex align-items-center">
                 <i class="fas fa-check-circle mr-3 fa-lg"></i>
                 <div>{{ session('success') }}</div>
@@ -25,148 +25,181 @@
         </div>
     @endif
 
-    <div class="card border-0 shadow-lg rounded-lg overflow-hidden">
-        <div class="card-header bg-white py-3 border-0">
-            <h5 class="mb-0 text-secondary font-weight-bold">
-                <i class="fas fa-list-ol mr-2 text-success"></i>Registro de Movimientos
+    <!-- Tabla de movimientos -->
+    <div class="card border-success shadow-lg rounded-lg">
+        <div class="card-header bg-success text-white py-3">
+            <h5 class="mb-0 font-weight-bold">
+                <i class="fas fa-list-ol mr-2"></i> Registro de Movimientos
             </h5>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                    <thead class="bg-gradient-primary text-white">
+                    <thead class="bg-success text-white">
                         <tr>
-                            <th class="py-3 align-middle border-0 font-weight-light">ID</th>
-                            <th class="py-3 align-middle border-0 font-weight-light">Tipo de Movimiento</th>
-                            <th class="py-3 align-middle border-0 font-weight-light">Cantidad</th>
-                            <th class="py-3 align-middle border-0 font-weight-light">Ubicación</th>
-                            <th class="py-3 align-middle border-0 font-weight-light">Categoría</th>
-                            <th class="py-3 align-middle border-0 font-weight-light">Producto</th>
-                            <th class="py-3 align-middle border-0 font-weight-light text-center">Acciones</th>
+                            <th class="py-3 align-middle border-0">ID</th>
+                            <th class="py-3 align-middle border-0">Tipo de Movimiento</th>
+                            <th class="py-3 align-middle border-0">Cantidad</th>
+                            <th class="py-3 align-middle border-0">Ubicación</th>
+                            <th class="py-3 align-middle border-0">Categoría</th>
+                            <th class="py-3 align-middle border-0">Producto</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($movements as $movement)
-                        <tr class="border-bottom">
-                            <td class="align-middle font-weight-bold text-dark">{{ $movement['id'] }}</td>
+                        <!-- Ejemplo de fila -->
+                        <tr>
+                            <td class="align-middle">1</td>
                             <td class="align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon-circle bg-light-{{ $movement['tipo'] == 'Ingreso' ? 'success' : 'danger' }} mr-3">
-                                        <i class="fas fa-{{ $movement['tipo'] == 'Ingreso' ? 'arrow-down' : 'arrow-up' }} text-{{ $movement['tipo'] == 'Ingreso' ? 'success' : 'danger' }}"></i>
-                                    </div>
-                                    <span>{{ $movement['tipo'] }}</span>
-                                </div>
+                                <span class="badge badge-success">Entrada</span>
                             </td>
-                            <td class="align-middle font-weight-bold {{ $movement['tipo'] == 'Ingreso' ? 'text-success' : 'text-danger' }}">
-                                {{ $movement['cantidad'] }}
-                            </td>
-                            <td class="align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon-circle bg-light-primary mr-3">
-                                        <i class="fas fa-map-marker-alt text-primary"></i>
-                                    </div>
-                                    <span>{{ $movement['ubicacion'] }}</span>
-                                </div>
-                            </td>
-                            <td class="align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon-circle bg-light-info mr-3">
-                                        <i class="fas fa-tags text-info"></i>
-                                    </div>
-                                    <span>{{ $movement['categoria'] }}</span>
-                                </div>
-                            </td>
-                            <td class="align-middle">
-                                <div class="d-flex align-items-center">
-                                    <div class="icon-circle bg-light-warning mr-3">
-                                        <i class="fas fa-box-open text-warning"></i>
-                                    </div>
-                                    <span>{{ $movement['producto'] }}</span>
-                                </div>
-                            </td>
-                            <td class="align-middle text-center">
-                                <div class="d-flex justify-content-center">
-                                    <a href="" class="btn btn-sm btn-icon btn-soft-primary rounded-circle mr-2 shadow-sm" title="Editar">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <form action="" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-icon btn-soft-danger rounded-circle shadow-sm" onclick="return confirm('¿Está seguro de eliminar este movimiento?')" title="Eliminar">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            <td class="align-middle">50</td>
+                            <td class="align-middle">Almacén A</td>
+                            <td class="align-middle">Oficina</td>
+                            <td class="align-middle">Marcadores</td>
                         </tr>
-                        @endforeach
+                        <!-- Más filas aquí -->
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="card-footer bg-white py-3 border-0">
+        <div class="card-footer bg-white py-3">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="text-muted small">
-                    Mostrando {{ count($movements) }} registros
-                </div>
-               
+                <!-- Paginación u otros elementos del footer -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nuevo Movimiento -->
+<div class="modal fade" id="newMovementModal" tabindex="-1" role="dialog" aria-labelledby="newMovementModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content border-success">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="newMovementModalLabel">
+                    <i class="fas fa-plus-circle mr-2"></i> Nuevo Movimiento
+                </h5>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="newMovementForm">
+                    @csrf
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Tipo de Movimiento</label>
+                                <select class="form-control border-success" name="movement_type" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="entry">Entrada</option>
+                                    <option value="exit">Salida</option>
+                                    <option value="transfer">Transferencia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Cantidad</label>
+                                <input type="number" class="form-control border-success" name="quantity" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Ubicación</label>
+                                <select class="form-control border-success" name="location_id" required>
+                                    <option value="">Seleccione...</option>
+                                    <!-- Opciones de ubicaciones -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Categoría</label>
+                                <select class="form-control border-success" name="category_id" required>
+                                    <option value="">Seleccione...</option>
+                                    <!-- Opciones de categorías -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Producto</label>
+                                <select class="form-control border-success" name="product_id" required>
+                                    <option value="">Seleccione...</option>
+                                    <!-- Opciones de productos -->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="text-success">Fecha</label>
+                                <input type="date" class="form-control border-success" name="movement_date" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="text-success">Comentarios</label>
+                        <textarea class="form-control border-success" name="comments" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+                    <i class="fas fa-times mr-2"></i> Cancelar
+                </button>
+                <button type="button" class="btn btn-success" id="saveMovementBtn">
+                    <i class="fas fa-save mr-2"></i> Guardar Movimiento
+                </button>
             </div>
         </div>
     </div>
 </div>
 
 <style>
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%) !important;
+    .bg-success {
+        background-color: #28a745 !important;
     }
-    .text-gradient-success {
-        background: -webkit-linear-gradient(45deg, #2b5876, #4e4376);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .btn-outline-success:hover {
+        color: white !important;
     }
-    .icon-circle {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .border-success {
+        border-color: #28a745 !important;
     }
-    .btn-soft-primary {
-        background-color: rgba(77, 171, 247, 0.1);
-        color: #4dabf7;
-        transition: all 0.3s;
-    }
-    .btn-soft-primary:hover {
-        background-color: #4dabf7;
-        color: white;
-    }
-    .btn-soft-danger {
-        background-color: rgba(237, 76, 120, 0.1);
-        color: #ed4c78;
-        transition: all 0.3s;
-    }
-    .btn-soft-danger:hover {
-        background-color: #ed4c78;
-        color: white;
-    }
-    .rounded-lg {
+    .card {
         border-radius: 12px !important;
     }
-    .bg-light-success {
-        background-color: rgba(40, 167, 69, 0.1) !important;
+    .badge-success {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        padding: 5px 10px;
+        font-weight: 600;
     }
-    .bg-light-danger {
-        background-color: rgba(220, 53, 69, 0.1) !important;
-    }
-    .bg-light-primary {
-        background-color: rgba(13, 110, 253, 0.1) !important;
-    }
-    .bg-light-info {
-        background-color: rgba(25, 135, 84, 0.1) !important;
-    }
-    .bg-light-warning {
-        background-color: rgba(255, 193, 7, 0.1) !important;
+    .table-hover tbody tr:hover {
+        background-color: rgba(40, 167, 69, 0.05);
     }
 </style>
+
+@section('scripts')
+<script>
+$(document).ready(function() {
+    // Inicializar tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+    
+    // Lógica para guardar el movimiento
+    $('#saveMovementBtn').click(function() {
+        // Aquí iría la lógica para guardar el movimiento
+        alert('Movimiento guardado exitosamente');
+        $('#newMovementModal').modal('hide');
+    });
+});
+</script>
+@endsection
+
 @endsection

@@ -123,4 +123,10 @@ class InventoryController extends Controller
     {
         //
     }
+
+        public function movements_warehouseman()
+    {
+
+        return view('solicitud::warehouseman.movements_store');
+    }
 }

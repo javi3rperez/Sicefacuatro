@@ -22,25 +22,32 @@ use Modules\SOLICITUD\Http\Controllers\EvidenceController;
 Route::middleware(['lang'])->group(function(){
     Route::prefix('solicitud')->group(function() {
         Route::get('/index', 'SOLICITUDController@index')->name('cefa.solicitud.index');
+
+        // Rutas para el rol de administrador
         Route::get('/admin/welcome', 'SOLICITUDController@admin')->name('solicitud.admin.welcome');
-        Route::get('/leader/welcome', 'SOLICITUDController@leader')->name('solicitud.leader.welcome');
-        Route::get('/store/welcome', 'SOLICITUDController@store')->name('solicitud.store.welcome');
+        // rutas para el rol de administrador 2.0
+        Route::get('/admin/inventory', [InventoryController::class, 'inventory_admin'])->name('solicitud.admin.inventory');
+        Route::get('/admin/list', [ListController::class, 'list_admin'])->name('solicitud.admin.list');
+        Route::get('/admin/evidence', [EvidenceController::class, 'evidence_admin'])->name('solicitud.admin.evidence');
+        Route::get('/admin/movements', [MovementsController::class, 'movements_admin'])->name('solicitud.admin.movements');
+
+
         Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
     
         
         // INSTRUCTOR LIDER 
+        Route::get('/leader/welcome', 'SOLICITUDController@leader')->name('solicitud.leader.welcome');
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
         Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
         Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
 
 
         // ALMACENISTA
+        Route::get('/store/welcome', 'SOLICITUDController@store')->name('solicitud.store.welcome');
         Route::get('/warehouseman/inventory', [InventoryController::class, 'inventory_warehouseman'])->name('solicitud.store.inventory');
-        Route::get('/warehouseman/products', [ProductsController::class, 'products_warehouseman'])->name('solicitud.store.products');
-        Route::get('/warehouseman/categories', [CategoriesController::class, 'categories_warehouseman'])->name('solicitud.store.categories');
         Route::get('/warehouseman/list', [ListController::class, 'list_warehouseman'])->name('solicitud.store.list');
-        Route::get('/warehouseman/lots', [LotsController::class, 'lots_warehouseman'])->name('solicitud.store.lots');
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
+        Route::get('/warehouseman/movements', [InventoryController::class, 'movements_warehouseman'])->name('solicitud.store.movements');
             
 });
 });

@@ -193,8 +193,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="" class="nav-link" style="color: var(--dark-color);">
-                                <i class="nav-icon fas fa-boxes" style="color: var(--primary-color);"></i>
+                            <a href="{{ route('solicitud.store.movements') }}" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-random" style="color: var(--primary-color);"></i>
                                 <p>Movimientos</p>
                             </a>
                         </li>
