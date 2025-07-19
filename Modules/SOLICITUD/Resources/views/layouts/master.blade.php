@@ -167,7 +167,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #ffffff; border-right: 1px solid #eaeaea;">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link" style="text-decoration:none">
+            <a href="{{route ('solicitud.admin.welcome')}}" class="brand-link" style="text-decoration:none">
                 <img src="{{ asset('AdminLTE/dist/img/logos.gif') }}" alt="Logo"
                     class="brand-image" style="opacity: .9">
                 <span class="brand-text font-weight-light" >Solicitudes</span>
@@ -180,32 +180,37 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                <a href="#" class="nav-link" style="color: var(--dark-color);">
+                <a href="{{route('solicitud.admin.list')}}" class="nav-link" style="color: var(--dark-color);">
                     <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                     <p>Listado</p>
+                </a>
+                <a href="{{route('solicitud.admin.record')}}" class="nav-link" style="color: var(--dark-color);">
+                    <i class="nav-icon fas fa-history" style="color: var(--primary-color);"></i>
+                    <p>Historial</p>
                 </a>
             </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                 <i class="nav-icon fas fa-history" style="color: var(--primary-color);"></i>
-                                <p>Historial</p>
+                                 <i class="nav-icon fas fa-file-alt" style="color: var(--primary-color);"></i>
+                                <p>Reportes almacen</p>
                             </a>
                             <ul class="nav nav-treeview" style="margin-left: 20px;">
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
+                                    <a href="{{ route('solicitud.store.inventory') }}" class="nav-link" style="color: var(--dark-color);">
                                         <span class="menu-item-text">Inventario</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Solisscitudes</span>
+                                        <span class="menu-item-text">a</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
+                                    <a href="{{ route('solicitud.admin.reports')}}" class="nav-link" style="color: var(--dark-color);">
                                         <span class="menu-item-text">Reportes</span>
                                     </a>
                                 </li>
+                                
                             </ul>
                         </li>
                     </ul>

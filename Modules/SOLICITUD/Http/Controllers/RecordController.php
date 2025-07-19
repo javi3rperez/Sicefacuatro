@@ -3,12 +3,10 @@
 namespace Modules\SOLICITUD\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
-use Modules\SICA\Entities\Person;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\SOLICITUD\Entities\Request as Solicitud;
 
-class ListController extends Controller
+class RecordController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,28 +14,18 @@ class ListController extends Controller
      */
     public function index()
     {
+        return view('admin.record', compact('record'));
         
-        return view('store.list', compact('list'));
     }
 
-    // Agrega el parámetro Request $request aquí
-    public function list_warehouseman(Request $request)
+    public function record_warehouseadmin()
     {
-        $query = Solicitud::with(['person', 'productiveUnitWarehouse', 'movementType'])
-            ->where('status', 'approved') // Solo aprobadas
-            ->orderBy('required_date', 'desc');
-        
-        if ($request->has('priority') && $request->priority != '') {
-            $query->where('priority', $request->priority);
-        }
-        
-        if ($request->has('date') && $request->date != '') {
-            $query->whereDate('request_date', $request->date);
-        }
-        
-        $list = $query->get();
+        $record = [
+            ['id' => 1, 'Solicitud' => 'Herramientas', 'Estado' => 'Aceptado'],
+            ['id' => 2, 'Solicitud' => 'Papeleria', 'Estado' => 'Aceptado'],
+        ];
 
-        return view('solicitud::warehouseman.list_store', compact('list'));
+        return view('solicitud::warehouseadmin.record_admin', compact('record'));
     }
 
     /**

@@ -19,7 +19,7 @@ class PermissionsTableSeeder extends Seeder
         
 
         // Aqui comienza los permissions del rol de administrador
-        $permissions_admin = []; 
+          $permissions_admin = []; 
        
         $app = App::where('name', 'SOLICITUD')->first();
 
@@ -29,19 +29,72 @@ class PermissionsTableSeeder extends Seeder
             'description' => 'Acceso al Rol de Administrador Solicitudes',
             'description_english' => 'Access to the Administrator Role',
             'app_id' => $app->id
+
         ]);
         //+
         $permissions_admin[] = $permission->id; 
         $rol_admin = Role::where('slug', 'solicitud.admin')->first();
         $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
+          
+        //permiso para CRUD listado ROL ADMINISTRADOR
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.list'], [
+            'name' => 'Acceso al Rol de Administrador para listado',
+            'description' => 'Acceso al Rol de Administrador para listado',
+            'description_english' => 'Access to the Administrator Role for list',
+            'app_id' => $app->id
+        ]);
+        $permissions_admin[] = $permission->id;
+        $rol_admin = Role::where('slug', 'solicitud.admin')->first();
+        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
 
+        //permiso para CRUD de historial ROL ADMINISTRADOR
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.record'], [
+            'name' => 'Acceso al Rol de Administrador para record',
+            'description' => 'Acceso al Rol de Administrador para historial',
+            'description_english' => 'Access to the Administrator Role for record',
+            'app_id' => $app->id
+        ]);
+        $permissions_admin[] = $permission->id;
+        $rol_admin = Role::where('slug', 'solicitud.admin')->first();
+        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
+
+        //permiso para CRUD de inventario ROL ADMINISTRADOR
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.inventory'], [
+                'name' => 'Acceso al Rol de almacenista para inventario',
+                'description' => 'Acceso al Rol de Almacenista',
+                'description_english' => 'Access to the Warehouse Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_admin[] = $permission->id;
+        $rol_admin = Role::where('slug','solicitud.store')->first(); 
+        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin); 
+
+        //permiso para CRUD de reportes ROL ADMINISTRADOR
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.reports'], [
+            'name' => 'Acceso al Rol de Administrador para reportes',
+            'description' => 'Acceso al Rol de Administrador para reportes',
+            'description_english' => 'Access to the Administrator Role for reports',
+            'app_id' => $app->id
+        ]);
+        $permissions_admin[] = $permission->id;
+        $rol_admin = Role::where('slug', 'solicitud.admin')->first();
+        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
+
+        // Permiso para CRUD de formatos ROL ADMINISTRADOR
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.formato'], [
+            'name' => 'Acceso al Rol de Administrador para formatos',
+            'description' => 'Acceso al Rol de Administrador para formatos',
+            'description_english' => 'Access to the Administrator Role for formats',
+            'app_id' => $app->id 
+        ]);
+        $permissions_admin[] = $permission->id;
+        $rol_admin = Role::where('slug', 'solicitud.admin')->first();
+        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
 
 
 
          // Aqui comienza los permissions del rol del Instructor lider  
         $permissions_leader = []; 
-                
-          
         $app = App::where('name', 'SOLICITUD')->first();
             
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.welcome'], [

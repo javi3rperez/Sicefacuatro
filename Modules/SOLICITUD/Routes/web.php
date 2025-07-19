@@ -5,10 +5,11 @@ use Modules\SOLICITUD\Http\Controllers\RequestController;
 use Modules\SOLICITUD\Http\Controllers\HistoryController;
 use Modules\SOLICITUD\Http\Controllers\ProductsController;
 use Modules\SOLICITUD\Http\Controllers\CategoriesController;
+use Modules\SOLICITUD\Http\Controllers\ListadminController;
 use Modules\SOLICITUD\Http\Controllers\ListController;
 use Modules\SOLICITUD\Http\Controllers\LotsController;
 use Modules\SOLICITUD\Http\Controllers\EvidenceController;
-
+use Modules\SOLICITUD\Http\Controllers\RecordController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,6 +42,14 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseman/list', [ListController::class, 'list_warehouseman'])->name('solicitud.store.list');
         Route::get('/warehouseman/lots', [LotsController::class, 'lots_warehouseman'])->name('solicitud.store.lots');
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
-            
+        
+        //ADMIN CRUD
+        Route::get('/warehouseadmin/list', [ListadminController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
+        Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
+        Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
+        Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
+        
+        // Ruta para mostrar el formato de solicitud
+        Route::get('/solicitud/warehouseadmin/formato/{id}', [ListadminController::class, 'formato_warehouseadmin'])->name('solicitud.formato');
 });
 });
