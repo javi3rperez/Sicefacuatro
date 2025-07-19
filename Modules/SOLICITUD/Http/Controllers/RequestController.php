@@ -5,6 +5,7 @@ namespace Modules\SOLICITUD\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Modules\SOLICITUD\Entities\Request as Solicitud; // ✅ ESTA LÍNEA ES CLAVE
 
 class RequestController extends Controller
 {
@@ -32,10 +33,20 @@ class RequestController extends Controller
      * @return Renderable
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'program' => 'required|string|max:255',
+        'batch' => 'required|string|max:255',
+        'product' => 'required|string|max:255',
+        'quantity' => 'required|integer|min:1',
+        'date' => 'required|date'
+    ]);
 
+    Solicitud::create($validated);
+
+    return redirect()->back()->with('success', 'Solicitud enviada correctamente.');
+}
     /**
      * Show the specified resource.
      * @param int $id

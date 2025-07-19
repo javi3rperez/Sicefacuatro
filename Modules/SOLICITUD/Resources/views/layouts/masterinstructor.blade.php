@@ -181,19 +181,19 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.instructor.inventory') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-boxes" style="color: var(--primary-color);"></i>
                                 <p>Inventario</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.instructor.request') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-plus-circle" style="color: var(--primary-color);"></i>
                                 <p>Crear Solicitud</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.instructor.history') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
                             </a>

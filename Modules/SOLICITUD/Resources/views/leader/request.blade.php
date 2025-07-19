@@ -46,37 +46,45 @@
 
 <div class="form-container">
     <h3>Solicitud</h3>
-    <form method="GET" action="#">
+
+    {{-- Mensaje de éxito --}}
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('solicitud.leader.store') }}">
         @csrf
+
         <div class="form-group">
-            <label for="nombre">Nombre</label>
-            <input type="text" name="nombre" id="nombre" class="form-control" required>
+            <label for="name">Nombre</label>
+            <input type="text" name="name" id="name" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="programa">Programa</label>
-            <input type="text" name="programa" id="programa" class="form-control" required>
+            <label for="program">Programa</label>
+            <input type="text" name="program" id="program" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="lote">Lote</label>
-            <input type="text" name="lote" id="lote" class="form-control" required>
+            <label for="batch">Lote</label>
+            <input type="text" name="batch" id="batch" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="producto">Producto</label>
-            <input type="text" name="producto" id="producto" class="form-control" required>
+            <label for="product">Producto</label>
+            <input type="text" name="product" id="product" class="form-control" required>
         </div>
 
         <div class="form-group">
-            <label for="cantidad">Cantidad</label>
-            <input type="number" name="cantidad" id="cantidad" class="form-control" required min="1">
+            <label for="quantity">Cantidad</label>
+            <input type="number" name="quantity" id="quantity" class="form-control" required min="1">
         </div>
 
-        <!-- Campo de fecha -->
         <div class="form-group">
-            <label for="fecha">Fecha</label>
-            <input type="date" name="fecha" id="fecha" class="form-control" required>
+            <label for="date">Fecha</label>
+            <input type="date" name="date" id="date" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-success">Solicitar</button>

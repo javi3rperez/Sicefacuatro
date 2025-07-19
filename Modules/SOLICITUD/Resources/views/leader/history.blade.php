@@ -120,20 +120,6 @@
                     </button>
                 </td>
             </tr>
-            <tr>
-                <td>3</td>
-                <td>Aseo | Desinfectantes | Cloro | 20</td>
-                <td>2025-07-05</td>
-                <td style="color: gray;">Pendiente</td>
-                <td class="col-ver">
-                    <button class="btn btn-warning btn-sm" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm" title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>

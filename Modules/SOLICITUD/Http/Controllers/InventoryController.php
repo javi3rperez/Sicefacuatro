@@ -13,7 +13,31 @@ class InventoryController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-  
+    public function inventory_leader()
+    {
+        $inventory = DB::select("
+            SELECT 
+                elements.image,
+                elements.name, 
+                inventories.stock, 
+                warehouses.name as warehouse_name, 
+                categories.name as category_name,
+                inventories.id
+            FROM inventories 
+            INNER JOIN elements ON inventories.element_id = elements.id
+            INNER JOIN productive_unit_warehouses ON inventories.productive_unit_warehouse_id = productive_unit_warehouses.id
+            INNER JOIN warehouses ON productive_unit_warehouses.warehouse_id = warehouses.id
+            INNER JOIN categories ON elements.category_id = categories.id
+        ");
+
+        // Convertir a colección de arrays asociativos
+        $inventory = collect($inventory)->map(function($item) {
+            return (array)$item;
+        });
+
+        return view('solicitud::leader.inventory', compact('inventory'));
+    }
+
     public function inventory_warehouseman()
     {
         $inventory = DB::select("

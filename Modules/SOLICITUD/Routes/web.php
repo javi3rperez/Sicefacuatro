@@ -10,6 +10,9 @@ use Modules\SOLICITUD\Http\Controllers\ListController;
 use Modules\SOLICITUD\Http\Controllers\LotsController;
 use Modules\SOLICITUD\Http\Controllers\EvidenceController;
 use Modules\SOLICITUD\Http\Controllers\RecordController;
+use Modules\SOLICITUD\Http\Controllers\SOLICITUDController;
+use Modules\SOLICITUD\Http\Controllers\InstructorController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,12 +31,11 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/store/welcome', 'SOLICITUDController@store')->name('solicitud.store.welcome');
         Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
     
-        
         // INSTRUCTOR LIDER 
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
         Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
         Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
-
+        Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
 
         // ALMACENISTA
         Route::get('/warehouseman/inventory', [InventoryController::class, 'inventory_warehouseman'])->name('solicitud.store.inventory');
@@ -48,8 +50,12 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
         Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
         Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
-        
-        // Ruta para mostrar el formato de solicitud
         Route::get('/solicitud/warehouseadmin/formato/{id}', [ListadminController::class, 'formato_warehouseadmin'])->name('solicitud.formato');
-});
+            
+        //Instructor
+        Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
+        Route::get('/instructor/request', [InstructorController::class, 'request_instructor'])->name('solicitud.instructor.request');
+        Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        Route::post('/instructor/store', [InstructorController::class, 'store_instructor'])->name('solicitud.instructor.store');
+    });
 });
