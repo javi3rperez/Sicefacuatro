@@ -8,6 +8,8 @@ use Modules\SOLICITUD\Http\Controllers\CategoriesController;
 use Modules\SOLICITUD\Http\Controllers\ListController;
 use Modules\SOLICITUD\Http\Controllers\LotsController;
 use Modules\SOLICITUD\Http\Controllers\EvidenceController;
+use Modules\SOLICITUD\Http\Controllers\SOLICITUDController;
+use Modules\SOLICITUD\Http\Controllers\InstructorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,5 +45,13 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseman/lots', [LotsController::class, 'lots_warehouseman'])->name('solicitud.store.lots');
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
             
+        //Instructor
+        
+        Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
+        Route::get('/instructor/request', [InstructorController::class, 'request_instructor'])->name('solicitud.instructor.request');
+        Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        Route::post('/instructor/store', [InstructorController::class, 'store_instructor'])->name('solicitud.instructor.store');
+    
+
 });
 });

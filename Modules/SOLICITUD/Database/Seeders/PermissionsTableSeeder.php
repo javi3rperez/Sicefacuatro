@@ -191,21 +191,57 @@ class PermissionsTableSeeder extends Seeder
         $rol_store->permissions()->syncWithoutDetaching($permissions_store);
 
             
-        // Aqui comienza los permissions del rol de instructor
-        $permissions_instructor = [];      
-            
-        $app = App::where('name', 'SOLICITUD')->first();
-    
-            
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.instructor.welcome'], [
-                'name' => 'Acceso al Rol de bodega Solicitudes',
-                'description' => 'Acceso al Rol de bodega',
-                'description_english' => 'Access to the store Role',
+        // Permisos del rol de instructor
+        $permissions_instructor = [];
+
+        // Bienvenida
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.welcome'],
+            [
+                'name' => 'Acceso al panel de Instructor',
+                'description' => 'Permite ver la pantalla de bienvenida del instructor',
+                'description_english' => 'Access to Instructor dashboard',
                 'app_id' => $app->id
-            ]);
-        $permissions_instructor[] = $permission->id;  
-        $rol_instructor = Role::where('slug','solicitud.instructor')->first();
+            ]
+        )->id;
+
+        // Inventario
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.inventory'],
+            [
+                'name' => 'Inventario para Instructor',
+                'description' => 'El instructor puede ver el inventario',
+                'description_english' => 'Instructor access to inventory',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Crear solicitud
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.request'],
+            [
+                'name' => 'Crear Solicitud',
+                'description' => 'El instructor puede crear una solicitud',
+                'description_english' => 'Instructor request creation access',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Historial
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.history'],
+            [
+                'name' => 'Historial de solicitudes',
+                'description' => 'El instructor puede ver el historial de solicitudes',
+                'description_english' => 'Instructor request history access',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Asignar todos los permisos de una sola vez
+        $rol_instructor = Role::where('slug', 'solicitud.instructor')->first();
         $rol_instructor->permissions()->syncWithoutDetaching($permissions_instructor);
     }
-} 
+}
+
 
