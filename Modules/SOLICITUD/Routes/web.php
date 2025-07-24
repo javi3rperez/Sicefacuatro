@@ -46,11 +46,11 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
         
         //ADMIN CRUD
-        Route::get('/warehouseadmin/list', [ListadminController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
+        Route::get('/warehouseadmin/list', [ListController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
         Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
         Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
         Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
-        Route::get('/solicitud/warehouseadmin/formato/{id}', [ListadminController::class, 'formato_warehouseadmin'])->name('solicitud.formato');
+
             
         //Instructor
         Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
