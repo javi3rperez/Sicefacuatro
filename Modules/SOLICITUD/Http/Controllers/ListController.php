@@ -18,6 +18,7 @@ class ListController extends Controller
     {
         
         return view('store.list', compact('list'));
+        return view('admin.list', compact('list'));
     }
 
     // Agrega el parámetro Request $request aquí
@@ -39,7 +40,36 @@ class ListController extends Controller
 
         return view('solicitud::warehouseman.list_store', compact('list'));
     }
+    
+public function list_warehouseadmin(Request $request)
+{
+    $query = Solicitud::query()
+                ->select([
+                    'id',
+                    'name',
+                    'program',
+                    'created_at'
+                ])
+                ->orderBy('created_at', 'desc');
 
+    // Filtro por fecha
+    if ($request->filled('fecha')) {
+        $query->whereDate('created_at', $request->fecha);
+    }
+
+    // Filtro por nombre (búsqueda parcial)
+    if ($request->filled('nombre')) {
+        $query->where('name', 'like', '%'.$request->nombre.'%');
+    }
+
+    $list = $query->paginate(10);
+
+    return view('solicitud::warehouseadmin.list_admin', [
+        'list' => $list,
+        'fecha_seleccionada' => $request->fecha,
+        'nombre_seleccionado' => $request->nombre
+    ]);
+}
     /**
      * Show the form for creating a new resource.
      * @return Renderable

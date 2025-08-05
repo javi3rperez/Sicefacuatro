@@ -152,6 +152,31 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader = Role::where('slug','solicitud.leader')->first(); 
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
+        
+        // Permiso para EDITAR HISTORIAL ROL INSTRUCTOR LIDER
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.update'], [
+            'name' => 'Acceso al Rol de instructor lider para historial de solicitudes',
+            'description' => 'Acceso al Rol de instructor lider',
+            'description_english' => 'Access to the instructor lead Role',
+            'app_id' => $app->id
+        ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
+
+        // Permiso para ELIMINAR HISTORIAL ROL INSTRUCTOR LIDER
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.destroy'], [
+            'name' => 'Acceso al Rol de instructor lider para historial de solicitudes',
+            'description' => 'Acceso al Rol de instructor lider',
+            'description_english' => 'Access to the instructor lead Role',
+            'app_id' => $app->id
+        ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
+
+
+
 
 
       // Aqui comienza los permissions del rol de bodega 

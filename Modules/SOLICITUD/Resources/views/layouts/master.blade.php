@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
     <link rel="icon" href="{{ asset('AdminLTE/dist/img/logos.gif')}}" type="image/x-icon">
-    <title>Gestión de Solicitudes</title>
+    <title>Gestión de Solicitudes</title>   
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="{{ asset('AdminLTE/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback') }}">

@@ -17,8 +17,8 @@ class Request extends Model
     protected $fillable = [
         'name',
         'program',
-        'batch',
         'product',
+        'batch',
         'quantity',
         'date'
     ];
