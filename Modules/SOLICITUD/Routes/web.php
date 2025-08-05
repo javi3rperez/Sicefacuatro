@@ -34,8 +34,12 @@ Route::middleware(['lang'])->group(function(){
         // INSTRUCTOR LIDER 
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
         Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
-        Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
+        Route::get('/leader/history', [RequestController::class, 'index'])->name('solicitud.leader.index');
         Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
+        Route::put('/leader/request/update/{id}', [RequestController::class, 'update'])->name('solicitud.leader.update');
+        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy'])->name('solicitud.leader.destroy');
+
+
 
         // ALMACENISTA
         Route::get('/warehouseman/inventory', [InventoryController::class, 'inventory_warehouseman'])->name('solicitud.store.inventory');
