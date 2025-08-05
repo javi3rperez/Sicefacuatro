@@ -22,7 +22,7 @@ class Request extends Model
         'quantity',
         'date'
     ];
-    
+     
     protected static function newFactory()
     {
         return \Modules\SOLICITUD\Database\factories\RequestFactory::new();
