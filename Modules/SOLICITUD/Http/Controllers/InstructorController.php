@@ -47,26 +47,16 @@ class InstructorController extends Controller
         return view('solicitud::instructor.request', compact('productos', 'lotes'));
     }
 
-    /**
-     * Mostrar historial de solicitudes (simulado)
-     */
-    public function history_instructor()
-    {
-        $solicitudes = [
-            (object)[
-                'producto' => (object)['nombre' => 'Alcohol'],
-                'cantidad' => 2,
-                'estado' => 'enviada',
-                'created_at' => now()
-            ],
-            (object)[
-                'producto' => (object)['nombre' => 'Guantes'],
-                'cantidad' => 5,
-                'estado' => 'aceptada',
-                'created_at' => now()->subDays(2)
-            ]
-        ];
+   
+    public function historial()
+{
+    $user = auth()->user();
 
-        return view('solicitud::instructor.history', compact('solicitudes'));
-    }
+    $solicitudes = Request::with('materiales')
+        ->where('user_id', $user->id)
+        ->orderByDesc('created_at')
+        ->paginate(10);
+
+    return view('solicitud::instructor.historial', compact('solicitudes'));
+}
 }
