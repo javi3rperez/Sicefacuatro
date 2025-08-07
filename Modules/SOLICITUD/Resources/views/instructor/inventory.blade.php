@@ -1,4 +1,4 @@
-@extends('solicitud::layouts.masterleader') 
+@extends('solicitud::layouts.masterinstructor')
 
 @section('content')
 <div class="container-fluid py-5">
@@ -19,8 +19,7 @@
             </div>
         </div>
     @endif
-
-    <!-- Filtros -->
+     <!-- Filtros -->
     <div class="card mb-4 shadow-sm">
         <div class="card-body py-2">
             <form>
@@ -41,14 +40,11 @@
                     <div class="col-md-2 d-flex align-items-end">
                         <button type="button" class="btn btn-sm btn-success w-100">Buscar</button>
                     </div>
-                    <div class="col-md-3">
-                    </div>
                 </div>
             </form>
         </div>
     </div>
-
-    <!-- Vista de Catálogo -->
+     <!-- Vista de Catálogo -->
     <div class="row">
         @foreach($inventory as $item)
         <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
@@ -68,6 +64,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-2">
                         <h5 class="card-title font-weight-bold mb-0">{{ $item['name'] }}</h5>
+                        
                         <span class="badge badge-success">{{ $item['warehouse_name'] }}</span>
                     </div>
                     <div class="mb-2">
@@ -77,7 +74,7 @@
                     </div>
                 </div>
                 <div class="card-footer bg-white border-0 pt-0">
-                    <div class="d-flex justify-content-center ">
+                    <div class="d-flex justify-content-between">
                         <a href="#" class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#detailsModal{{ $item['id'] }}">
                             <i class="fas fa-eye mr-1"></i> Detalles
                         </a>
@@ -85,8 +82,6 @@
                 </div>
             </div>
         </div>
-
-
         <!-- Modal de Detalles -->
         <div class="modal fade" id="detailsModal{{ $item['id'] }}" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel{{ $item['id'] }}" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -142,8 +137,7 @@
         </div>
         @endforeach
     </div>
-
-    <!-- Paginación -->
+     <!-- Paginación -->
     <div class="d-flex justify-content-center mt-4">
         <nav aria-label="Page navigation">
             <ul class="pagination pagination-green">
@@ -160,54 +154,7 @@
         </nav>
     </div>
 </div>
-
-
-
-<style>
-    .bg-gradient-success {
-        background: linear-gradient(135deg, #45c23c 0%, #40971d 100%) !important;
-    }
-    .catalog-img {
-        height: 180px;
-        width: 100%;
-        object-fit: cover;
-    }
-    .catalog-img-placeholder {
-        height: 180px;
-        width: 100%;
-        background-color: #f8f9fa;
-    }
-    .card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-    .custom-file-label::after {
-        content: "Buscar";
-    }
-    .pagination-green .page-link {
-        color: #397a1f;
-        border-color: #d1e7dd;
-        transition: all 0.3s ease;
-    }
-    .pagination-green .page-link:hover {
-        color: white;
-        background-color: #2d6e14;
-        border-color: #2d6e14;
-    }
-    .pagination-green .page-item.active .page-link {
-        background-color: #307216;
-        border-color: #327318;
-    }
-    .pagination-green {
-        border-radius: 20px;
-        overflow: hidden;
-    }
-</style>
-
-<script>
+ <script>
     // Script para mostrar el nombre del archivo seleccionado
     document.querySelectorAll('.custom-file-input').forEach(function(input) {
         input.addEventListener('change', function(e) {

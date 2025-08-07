@@ -7,37 +7,36 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 
-
 class InventoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
-  public function inventory_leader()
-{
-    $inventory = [
-        [
-            'id' => 1,
-            'lote' => 'Ferretería',
-            'categoria' => 'Herramientas',
-            'producto' => 'Machetes',
-            'cantidad' => 10,
-            'fecha' => '07-03-2025' // Fecha de ingreso o solicitud
-        ],
-        [
-            'id' => 2,
-            'lote' => 'Papelería',
-            'categoria' => 'Elementos de escritura',
-            'producto' => 'Marcadores',
-            'cantidad' => 15,
-            'fecha' => '07-04-2025'
-        ],
-    ];
+    public function inventory_leader()
+    {
+        $inventory = DB::select("
+            SELECT 
+                elements.image,
+                elements.name, 
+                inventories.stock, 
+                warehouses.name as warehouse_name, 
+                categories.name as category_name,
+                inventories.id
+            FROM inventories 
+            INNER JOIN elements ON inventories.element_id = elements.id
+            INNER JOIN productive_unit_warehouses ON inventories.productive_unit_warehouse_id = productive_unit_warehouses.id
+            INNER JOIN warehouses ON productive_unit_warehouses.warehouse_id = warehouses.id
+            INNER JOIN categories ON elements.category_id = categories.id
+        ");
 
-    return view('solicitud::leader.inventory', compact('inventory'));
-}
+        // Convertir a colección de arrays asociativos
+        $inventory = collect($inventory)->map(function($item) {
+            return (array)$item;
+        });
 
+        return view('solicitud::leader.inventory', compact('inventory'));
+    }
 
     public function inventory_warehouseman()
     {
@@ -130,3 +129,4 @@ class InventoryController extends Controller
         return view('solicitud::warehouseman.movements_store');
     }
 }
+

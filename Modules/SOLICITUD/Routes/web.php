@@ -5,9 +5,13 @@ use Modules\SOLICITUD\Http\Controllers\RequestController;
 use Modules\SOLICITUD\Http\Controllers\HistoryController;
 use Modules\SOLICITUD\Http\Controllers\ProductsController;
 use Modules\SOLICITUD\Http\Controllers\CategoriesController;
+use Modules\SOLICITUD\Http\Controllers\ListadminController;
 use Modules\SOLICITUD\Http\Controllers\ListController;
 use Modules\SOLICITUD\Http\Controllers\LotsController;
 use Modules\SOLICITUD\Http\Controllers\EvidenceController;
+use Modules\SOLICITUD\Http\Controllers\RecordController;
+use Modules\SOLICITUD\Http\Controllers\SOLICITUDController;
+use Modules\SOLICITUD\Http\Controllers\InstructorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,12 +38,15 @@ Route::middleware(['lang'])->group(function(){
 
         Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
     
-        
         // INSTRUCTOR LIDER 
         Route::get('/leader/welcome', 'SOLICITUDController@leader')->name('solicitud.leader.welcome');
         Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
         Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
-        Route::get('/leader/history', [HistoryController::class, 'index'])->name('solicitud.leader.index');
+        Route::get('/leader/history', [RequestController::class, 'index'])->name('solicitud.leader.index');
+        Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
+        Route::put('/leader/request/update/{id}', [RequestController::class, 'update'])->name('solicitud.leader.update');
+        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy'])->name('solicitud.leader.destroy');
+
 
 
         // ALMACENISTA
@@ -48,6 +55,18 @@ Route::middleware(['lang'])->group(function(){
         Route::get('/warehouseman/list', [ListController::class, 'list_warehouseman'])->name('solicitud.store.list');
         Route::get('/warehouseman/evidence', [EvidenceController::class, 'evidence_warehouseman'])->name('solicitud.store.evidence');
         Route::get('/warehouseman/movements', [InventoryController::class, 'movements_warehouseman'])->name('solicitud.store.movements');
+        
+        //ADMIN CRUD
+        Route::get('/warehouseadmin/list', [ListController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
+        Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
+        Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
+        Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
+
             
-});
+        //Instructor
+        Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
+        Route::get('/instructor/request', [InstructorController::class, 'request_instructor'])->name('solicitud.instructor.request');
+        Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        Route::post('/instructor/store', [InstructorController::class, 'store_instructor'])->name('solicitud.instructor.store');
+    });
 });

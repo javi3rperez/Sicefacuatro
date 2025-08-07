@@ -174,7 +174,7 @@
                 <span class="brand-text font-weight-light" >Solicitudes</span>
             </a>
 
-            <!-- Sidebar -->
+            <!-- Sidebar --> 
             <div class="sidebar">
 
                 <!-- Sidebar Menu -->
