@@ -15,6 +15,9 @@ class Evidence extends Model
      *
      * @var array
      */
+
+    protected $table = 'evidences'; // Asegura que use la tabla correcta
+
     protected $fillable = [
         'category_id',
         'lot_number',

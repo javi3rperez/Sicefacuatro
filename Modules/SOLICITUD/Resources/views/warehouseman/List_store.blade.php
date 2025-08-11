@@ -2,7 +2,7 @@
 
 @section('content')
 <br>
-<div class="container mt-5">
+<div class="container py-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-success font-weight-bold">
             <i class="fas fa-clipboard-list"></i> Listado de Solicitudes Aprobadas
