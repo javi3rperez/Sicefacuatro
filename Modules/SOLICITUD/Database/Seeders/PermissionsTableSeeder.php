@@ -35,64 +35,6 @@ class PermissionsTableSeeder extends Seeder
         $permissions_admin[] = $permission->id; 
         $rol_admin = Role::where('slug', 'solicitud.admin')->first();
         $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
-    
-        // permisos administrador 2.0
-
-        //Permiso para CRUD INVENTRIO 
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.inventory'], [
-                'name' => 'Acceso al Rol de almacenista para inventario',
-                'description' => 'Acceso al Rol de Almacenista',
-                'description_english' => 'Access to the Warehouse Role',
-                'app_id' => $app->id
-            ]);
-        $permissions_admin[] = $permission->id;
-        $rol_admin = Role::where('slug','solicitud.admin')->first(); 
-        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin); 
-
-        // Permiso para CRUD LISTA DE SOLICITUDES 
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.list'], [
-            'name' => 'Acceso al Rol de almacenista para listas de solicitud',
-            'description' => 'Acceso al CRUD de listas de solicitud',
-            'description_english' => 'Access to List CRUD',
-            'app_id' => $app->id
-        ]);
-
-        $permissions_admin[] = $permission->id;
-        $rol_admin = Role::where('slug', 'solicitud.admin')->first(); 
-        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
-        
-        // Permiso para CRUD EVIDENCIA
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.evidence'], [
-            'name' => 'Acceso al Rol de almacenista para Evidencia',
-            'description' => 'Acceso al CRUD de Evidencia',
-            'description_english' => 'Access to Evidencia CRUD',
-            'app_id' => $app->id
-        ]);
-
-        $permissions_admin[] = $permission->id;
-        $rol_admin = Role::where('slug', 'solicitud.admin')->first(); 
-        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
-
-        // permiso para CRUD MOVIMIENTOS
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.movements'], [
-            'name' => 'Acceso al Rol de almacenista para listas de solicitud',
-            'description' => 'Acceso al CRUD de listas de solicitud',
-            'description_english' => 'Access to List CRUD',
-            'app_id' => $app->id
-        ]);
-
-        $permissions_admin[] = $permission->id;
-        $rol_admin = Role::where('slug', 'solicitud.admin')->first(); 
-        $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
-
-
-
-
-
-
-
-
-
           
         //permiso para CRUD listado ROL ADMINISTRADOR
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.admin.list'], [
@@ -148,6 +90,9 @@ class PermissionsTableSeeder extends Seeder
         $permissions_admin[] = $permission->id;
         $rol_admin = Role::where('slug', 'solicitud.admin')->first();
         $rol_admin->permissions()->syncWithoutDetaching($permissions_admin);
+
+
+
 
 
 
@@ -236,6 +181,8 @@ class PermissionsTableSeeder extends Seeder
 
 
 
+
+
             
         // Aqui comienza los permissions del rol de instructor
         $permissions_instructor = [];      
@@ -252,6 +199,11 @@ class PermissionsTableSeeder extends Seeder
         $permissions_instructor[] = $permission->id;  
         $rol_instructor = Role::where('slug','solicitud.instructor')->first();
         $rol_instructor->permissions()->syncWithoutDetaching($permissions_instructor);
+
+
+
+
+
 
 
 
@@ -283,7 +235,16 @@ class PermissionsTableSeeder extends Seeder
         $permissions_store[] = $permission->id;
         $rol_store = Role::where('slug','solicitud.store')->first(); 
         $rol_store->permissions()->syncWithoutDetaching($permissions_store); 
-
+        //Permiso para crear un producto para el rol de almacenista
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.inventory.create'], [
+                'name' => 'Acceso al Rol de almacenista para inventario',
+                'description' => 'Acceso al Rol de Almacenista',
+                'description_english' => 'Access to the Warehouse Role',
+                'app_id' => $app->id
+            ]);
+        $permissions_store[] = $permission->id;
+        $rol_store = Role::where('slug','solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store); 
         // Permiso para CRUD LISTA DE SOLICITUDES ROL ALMACENISTA
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.list'], [
             'name' => 'Acceso al Rol de almacenista para listas de solicitud',
@@ -295,7 +256,7 @@ class PermissionsTableSeeder extends Seeder
         $permissions_store[] = $permission->id;
         $rol_store = Role::where('slug', 'solicitud.store')->first(); 
         $rol_store->permissions()->syncWithoutDetaching($permissions_store);
-        
+
         // Permiso para CRUD EVIDENCIA ROL ALMACENISTA
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.evidence'], [
             'name' => 'Acceso al Rol de almacenista para Evidencia',
@@ -319,8 +280,23 @@ class PermissionsTableSeeder extends Seeder
         $permissions_store[] = $permission->id;
         $rol_store = Role::where('slug', 'solicitud.store')->first(); 
         $rol_store->permissions()->syncWithoutDetaching($permissions_store);
+        
+        //permiso para crear evidencias rol almacenista
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.evidence.create'], [
+            'name' => 'Acceso al Rol de bodega Solicitudes',
+            'description' => 'Acceso al Rol de bodega',
+            'description_english' => 'Access to the store Role',
+            'app_id' => $app->id
+        ]);
+        $permissions_store[] = $permission->id; 
+        $rol_store = Role::where('slug','solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store);
 
-            
+
+
+
+
+        
         // Permisos del rol de instructor
         $permissions_instructor = [];
 

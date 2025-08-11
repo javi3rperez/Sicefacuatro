@@ -21,21 +21,20 @@ class EvidenceController extends Controller
     }
 
     public function evidence_warehouseman(Request $request)
-    {
+{
+    $evidence = DB::table('evidences')
+        ->join('categories', 'evidences.category_id', '=', 'categories.id')
+        ->select('evidences.*', 'categories.name as category_name')
+        ->when($request->input('category_id'), function ($query) use ($request) {
+            return $query->where('evidences.category_id', $request->input('category_id'));
+        })
+        ->orderBy('evidences.created_at', 'desc')
+        ->paginate(10);
 
+    $categories = Category::all(); // Obtener todas las categorías para el filtro/modal
 
-            $evidence = DB::table('evidences')
-                ->join('categories', 'evidences.category_id', '=', 'categories.id')
-                ->select('evidences.*', 'categories.name as category_name')
-                ->when($request->input('category_id'), function ($query) use ($request) {
-                    return $query->where('evidences.category_id', $request->input('category_id'));
-                })
-                ->orderBy('evidences.created_at', 'desc')
-                ->paginate(10);
-
-    
-        return view('solicitud::warehouseman.evidence_store', compact('evidence',));
-    }
+    return view('solicitud::warehouseman.evidence_store', compact('evidence', 'categories'));
+}
 
     /**
      * Show the form for creating a new resource.

@@ -12,7 +12,7 @@ class Request extends Model
 {
     use HasFactory;
 
-     protected $table = 'request'; // Asegura que use la tabla correcta
+     protected $table = 'requests'; // Asegura que use la tabla correcta
 
     protected $fillable = [
         'name',

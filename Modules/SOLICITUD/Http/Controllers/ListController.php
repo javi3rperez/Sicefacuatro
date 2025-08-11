@@ -14,12 +14,7 @@ class ListController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
-    public function index()
-    {
-        
-        return view('store.list', compact('list'));
-        return view('admin.list', compact('list'));
-    }
+
 
     // Agrega el parámetro Request $request aquí
     public function list_warehouseman(Request $request)

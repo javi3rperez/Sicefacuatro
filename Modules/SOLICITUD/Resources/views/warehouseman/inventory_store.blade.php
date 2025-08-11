@@ -244,51 +244,89 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="#" method="POST" enctype="multipart/form-data">
+           <form action="{{ route('solicitud.store.inventory.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+                    <h4>Nuevo Producto de Inventario</h4>
+                    
                     <div class="row">
+                        <!-- Primera columna -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="new_name">Nombre</label>
-                                <input type="text" class="form-control" id="new_name" name="name" required>
+                                <label><strong>Nombre</strong></label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Almacén</strong></label>
+                                <select class="form-control select2" name="warehouse_id" required>
+                                    <option value="">Seleccione un almacén</option>
+                                    @foreach($warehouses as $warehouse)
+                                        <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Categoría</strong></label>
+                                <select class="form-control select2" name="category_id" required>
+                                    <option value="">Seleccione una categoría</option>
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Stock</strong></label>
+                                <input type="number" class="form-control" name="stock" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Descripción</strong></label>
+                                <input type="text" class="form-control" name="description" required>
                             </div>
                         </div>
+
+                        <!-- Segunda columna -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="new_warehouse_name">Almacén</label>
-                                <input type="text" class="form-control" id="new_warehouse_name" name="warehouse_name" required>
+                                <label><strong>Precio</strong></label>
+                                <input type="number" class="form-control" name="price" required>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
+
                             <div class="form-group">
-                                <label for="new_category_name">Categoría</label>
-                                <input type="text" class="form-control" id="new_category_name" name="category_name" required>
+                                <label><strong>Personas</strong></label>
+                                <input type="text" class="form-control" name="person_id" required>
                             </div>
-                        </div>
-                        <div class="col-md-6">
+
                             <div class="form-group">
-                                <label for="new_stock">Stock</label>
-                                <input type="number" class="form-control" id="new_stock" name="stock" min="0" required>
+                                <label><strong>Almacén de unidad productiva</strong></label>
+                                <input type="text" class="form-control" name="productive_unit_warehouse_id" required>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+
                             <div class="form-group">
-                                <label for="new_image">Imagen del Producto</label>
+                                <label><strong>Fecha de producción</strong></label>
+                                <input type="date" class="form-control" name="production_date" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Destino</strong></label>
+                                <input type="text" class="form-control" name="destination" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Imagen del Producto</strong></label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="new_image" name="image" accept="image/*">
-                                    <label class="custom-file-label" for="new_image">Seleccionar archivo</label>
+                                    <input type="file" class="custom-file-input" name="image" accept="image/*">
+                                    <label class="custom-file-label">Seleccionar archivo</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">Guardar Producto</button>
                 </div>
             </form>

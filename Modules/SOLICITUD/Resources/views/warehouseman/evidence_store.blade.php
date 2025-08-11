@@ -30,25 +30,44 @@
                             <th class="py-2 small font-weight-bold text-uppercase">Tipo Mov.</th>
                             <th class="py-2 small font-weight-bold text-uppercase">Evidencia</th>
                             <th class="py-2 small font-weight-bold text-uppercase">Comentarios</th>
+                            <th class="py-2 small font-weight-bold text-uppercase">Fecha</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @forelse($evidence as $item)
                         <tr>
-                            <td class="py-2">1</td>
-                            <td class="py-2">12</td>
-                            <td class="py-2">Marcador</td>
-                            <td class="py-2">Sales</td>
+                            <td class="py-2">{{ $item->id }}</td>
+                            <td class="py-2">{{ $item->category_name }}</td>
+                            <td class="py-2">{{ $item->product_name }}</td>
                             <td class="py-2">
-                                <button class="btn btn-sm btn-outline-success">
-                                    <i class="fas fa-eye mr-1"></i> Ver
-                                </button>
+                                @if($item->movement_type == 'entry')
+                                    <span class="badge badge-primary">Entrada</span>
+                                @else
+                                    <span class="badge badge-warning">Salida</span>
+                                @endif
                             </td>
-                            <td class="py-2">Ninguno</td>
+                            <td class="py-2">
+                                @if($item->evidence_path)
+                                <a href="{{ asset('storage/'.$item->evidence_path) }}" target="_blank" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-eye mr-1"></i> Ver
+                                </a>
+                                @else
+                                <span class="text-muted">Sin evidencia</span>
+                                @endif
+                            </td>
+                            <td class="py-2">{{ $item->comments ?? 'Ninguno' }}</td>
                         </tr>
-                        <!-- Más filas aquí -->
+                        @empty
+                        <tr>
+                            <td colspan="7" class="text-center py-4">No hay evidencias registradas</td>
+                        </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="card-footer bg-white">
+            {{ $evidence->links() }}
         </div>
     </div>
 </div>
@@ -65,16 +84,18 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form id="addEvidenceForm">
-                    @csrf
+            <form action="{{ route('solicitud.store.evidence.create') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="text-success">Categoría</label>
                                 <select class="form-control border-success" id="category_id" name="category_id" required>
                                     <option value="">Seleccione una categoría</option>
-                                    <!-- Opciones de categorías irían aquí -->
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -101,7 +122,7 @@
                             <div class="form-group">
                                 <label class="text-success">Evidencia (Imagen)</label>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input border-success" id="evidence" name="evidence" accept="image/*">
+                                    <input type="file" class="custom-file-input border-success" id="evidence" name="evidence" accept="image/*" required>
                                     <label class="custom-file-label text-success" for="evidence">Seleccione un archivo</label>
                                 </div>
                             </div>
@@ -112,19 +133,20 @@
                         <label class="text-success">Comentarios</label>
                         <textarea class="form-control border-success" id="comments" name="comments" rows="3"></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-success" data-dismiss="modal">
-                    <i class="fas fa-times mr-2"></i>Cancelar
-                </button>
-                <button type="button" class="btn btn-success" id="saveEvidenceBtn">
-                    <i class="fas fa-save mr-2"></i>Guardar Evidencia
-                </button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save mr-2"></i>Guardar Evidencia
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+@endsection
 
 @section('scripts')
 <script>
@@ -136,6 +158,4 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection
-
 @endsection

@@ -24,8 +24,40 @@ return new class extends Migration
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
             
+        
+            // Campos de información organizacional
+            $table->string('mba_area', 100); // Área/MBA
+            $table->string('regional_code', 20); // Código regional
+            $table->string('regional_name', 100); // Nombre regional
+            $table->string('cost_center_code', 20); // Código centro de costo
+            $table->string('cost_center_name', 100); // Nombre centro de costo
+            $table->string('office_manager_name', 100); // Nombre jefe de oficina
+            
+            // Campos de cuentadante
+            $table->enum('accountable_type', ['unipersonal', 'multiple']); // Tipo cuentadante
+            $table->string('accountable_number', 50); // N° de cuentadante
+            
+            // Campos de destino
+            $table->text('destinations_requested_goods'); // Destinos de los bienes solicitados
+            
+            // Campos de identificación de bienes
+            $table->string('group_or_record_code', 50); // Código de grupo o ficha
+            $table->string('sena_code', 50); // Código SENA
+            $table->text('item_description'); // Descripción del bien
+            $table->string('measurement_unit', 20); // Unidad de medida
+            
+            // Campos de cantidades
+            $table->decimal('requested_quantity', 10, 2); // Cantidad solicitada
+            $table->decimal('delivered_quantity', 10, 2)->default(0); // Cantidad entregada
+            
             // Observación (opcional)
             $table->text('observation')->nullable();
+            
+            // Auditoría y timestamps
+            $table->foreignId('created_by')->constrained('users')->onDelete('set null');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->softDeletes();
+            $table->timestamps();
             
             // SoftDeletes y timestamps
             $table->softDeletes();

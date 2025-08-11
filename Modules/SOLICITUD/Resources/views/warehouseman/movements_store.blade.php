@@ -5,10 +5,10 @@
     <!-- Título principal y botón -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="text-success font-weight-bold">
-            <i class="fas fa-exchange-alt mr-2"></i> Movimientos de Inventario
+            <i class="fas fa-exchange-alt mr-2"></i> Entradas y Salidas de Inventario
         </h2>
         <button class="btn btn-success" data-toggle="modal" data-target="#newMovementModal">
-            <i class="fas fa-plus mr-2"></i> Nuevo Movimiento
+            <i class="fas fa-plus mr-2"></i> Nuevo Registro
         </button>
     </div>
 
@@ -29,7 +29,7 @@
     <div class="card border-success shadow-lg rounded-lg">
         <div class="card-header bg-success text-white py-3">
             <h5 class="mb-0 font-weight-bold">
-                <i class="fas fa-list-ol mr-2"></i> Registro de Movimientos
+                <i class="fas fa-list-ol mr-2"></i> Registro de Entradas y Salidas
             </h5>
         </div>
         <div class="card-body p-0">
@@ -76,7 +76,7 @@
         <div class="modal-content border-success">
             <div class="modal-header bg-success text-white">
                 <h5 class="modal-title" id="newMovementModalLabel">
-                    <i class="fas fa-plus-circle mr-2"></i> Nuevo Movimiento
+                    <i class="fas fa-plus-circle mr-2"></i> Nuevo Registro
                 </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -93,7 +93,6 @@
                                     <option value="">Seleccione...</option>
                                     <option value="entry">Entrada</option>
                                     <option value="exit">Salida</option>
-                                    <option value="transfer">Transferencia</option>
                                 </select>
                             </div>
                         </div>
@@ -155,7 +154,7 @@
                     <i class="fas fa-times mr-2"></i> Cancelar
                 </button>
                 <button type="button" class="btn btn-success" id="saveMovementBtn">
-                    <i class="fas fa-save mr-2"></i> Guardar Movimiento
+                    <i class="fas fa-save mr-2"></i> Guardar Registro
                 </button>
             </div>
         </div>
