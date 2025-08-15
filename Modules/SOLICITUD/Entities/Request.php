@@ -12,40 +12,29 @@ class Request extends Model
 {
     use HasFactory;
 
-     protected $table = 'requests'; // Asegura que use la tabla correcta
+     rotected $table = 'requests'; 
 
     protected $fillable = [
-        'name',
-        'program',
-        'product',
-        'batch',
-        'quantity',
-        'date'
+    'person_id',
+    'request_date' => 'date',
+    'status' => 'pending', 
+    'mba_area',
+    'regional_code',
+    'regional_name',
+    'cost_center_code',
+    'cost_center_name',
+    'office_manager_name',
+    'accountable_type', 
+    'accountable_number',
+    'destinations_requested_goods',
+    'group_or_record_code',
+    'sena_code',
+    'item_description',
+    'requested_quantity',
+    'delivered_quantity',
+    'observation',
+
     ];
-     
-    protected static function newFactory()
-    {
-        return \Modules\SOLICITUD\Database\factories\RequestFactory::new();
-    }
-    public function person()
-    {
-        return $this->belongsTo(Person::class, 'people_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
-    }
-
-     public function productiveUnitWarehouse()
-    {
-        return $this->belongsTo(ProductiveUnitWarehouse::class, 'productive_unit_warehouses_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
-    }
-
-    public function movementtype()
-    {
-        return $this->belongsTo(MovementType::class, 'movement_types_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
-    }
-
-    protected $dates = [
-    'request_date',
-    'required_date',
-    'created_at',
-    'updated_at'
-];
+    
+    
 }

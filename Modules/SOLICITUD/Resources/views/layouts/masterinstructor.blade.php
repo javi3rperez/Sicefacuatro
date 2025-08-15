@@ -198,6 +198,12 @@
                                 <p>Historial</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('solicitud.instructor.movements') }}" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-random" style="color: var(--primary-color);"></i>
+                                <p>Movimientos</p>
+                            </a>
+                        </li>
                     </ul>
                 </nav>
             </div>

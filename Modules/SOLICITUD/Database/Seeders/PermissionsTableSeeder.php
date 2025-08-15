@@ -179,34 +179,6 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
 
-
-
-
-
-            
-        // Aqui comienza los permissions del rol de instructor
-        $permissions_instructor = [];      
-            
-        $app = App::where('name', 'SOLICITUD')->first();
-    
-            
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.instructor.welcome'], [
-                'name' => 'Acceso al Rol de bodega Solicitudes',
-                'description' => 'Acceso al Rol de bodega',
-                'description_english' => 'Access to the store Role',
-                'app_id' => $app->id
-            ]);
-        $permissions_instructor[] = $permission->id;  
-        $rol_instructor = Role::where('slug','solicitud.instructor')->first();
-        $rol_instructor->permissions()->syncWithoutDetaching($permissions_instructor);
-
-
-
-
-
-
-
-
         // Aqui comienza los permissions del rol de Almacenista
         $permissions_store = []; 
                     
@@ -297,7 +269,7 @@ class PermissionsTableSeeder extends Seeder
 
 
         
-        // Permisos del rol de instructor
+       // Permisos del rol de instructor
         $permissions_instructor = [];
 
         // Bienvenida
@@ -322,13 +294,24 @@ class PermissionsTableSeeder extends Seeder
             ]
         )->id;
 
-        // Crear solicitud
+        // Solicitud - Crear
         $permissions_instructor[] = Permission::updateOrCreate(
             ['slug' => 'solicitud.instructor.request'],
             [
                 'name' => 'Crear Solicitud',
                 'description' => 'El instructor puede crear una solicitud',
                 'description_english' => 'Instructor request creation access',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Solicitud - Guardar
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.store'],
+            [
+                'name' => 'Guardar solicitud',
+                'description' => 'Permite al instructor guardar una solicitud',
+                'description_english' => 'Instructor request store access',
                 'app_id' => $app->id
             ]
         )->id;
@@ -344,10 +327,43 @@ class PermissionsTableSeeder extends Seeder
             ]
         )->id;
 
-        // Asignar todos los permisos de una sola vez
+        // Permiso para LISTAR HISTORIAL
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.index'], 
+            [
+                'name' => 'Acceso al historial de solicitudes del instructor',
+                'description' => 'Permite ver el historial de solicitudes del rol instructor',
+                'description_english' => 'Access to the instructor request history',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Permiso para ELIMINAR HISTORIAL
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.destroy'], 
+            [
+                'name' => 'Eliminar solicitudes del instructor',
+                'description' => 'Permite eliminar solicitudes del rol instructor',
+                'description_english' => 'Delete instructor requests',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Movimientos
+        $permissions_instructor[] = Permission::updateOrCreate(
+            ['slug' => 'solicitud.instructor.movements'], 
+            [
+                'name' => 'Acceso al historial de movimientos',
+                'description' => 'Permite ver el historial de entradas y salidas de inventario',
+                'description_english' => 'Access to the inventory movement history',
+                'app_id' => $app->id
+            ]
+        )->id;
+
+        // Asignar todos los permisos
         $rol_instructor = Role::where('slug', 'solicitud.instructor')->first();
         $rol_instructor->permissions()->syncWithoutDetaching($permissions_instructor);
+
+
     }
 }
-
-

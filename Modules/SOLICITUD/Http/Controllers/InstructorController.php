@@ -5,9 +5,13 @@ namespace Modules\SOLICITUD\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Inventory;
+use Modules\SOLICITUD\Entities\Request as Solicitud; 
+use Modules\SOLICITUD\Entities\Person;
+use Modules\SICA\Entities\MovementType;
 
 class InstructorController extends Controller
 {
+
     public function inventory_instructor()
     {
         $inventoryData = Inventory::with([
@@ -29,34 +33,105 @@ class InstructorController extends Controller
         return view('solicitud::instructor.inventory', compact('inventory'));
     }
 
-    /**
-     * Mostrar formulario para crear solicitud (sin guardar aún)
-     */
+
     public function request_instructor()
     {
-        $productos = [
-            (object)['id' => 1, 'nombre' => 'Alcohol'],
-            (object)['id' => 2, 'nombre' => 'Guantes']
-        ];
-
-        $lotes = [
-            (object)['id' => 101],
-            (object)['id' => 102]
-        ];
-
-        return view('solicitud::instructor.request', compact('productos', 'lotes'));
+        $persons = Person::all();
+        $movement_types = MovementType::all();
+        return view('solicitud::instructor.request', compact('persons', 'movement_types'));
+        
     }
 
-   
-    public function historial()
-{
-    $user = auth()->user();
+     /**
+     * Muestra el historial de solicitudes del instructor
+     */
+   public function history_instructor()
+    {
+        $user = auth()->user();
 
-    $solicitudes = Request::with('materiales')
-        ->where('user_id', $user->id)
-        ->orderByDesc('created_at')
-        ->paginate(10);
+        if (!$user->person) {
+            return back()->withErrors('No hay una persona asociada a este usuario.');
+        }
 
-    return view('solicitud::instructor.historial', compact('solicitudes'));
+        $solicitudes = Solicitud::select([
+                'id',
+                'observation',
+                'request_date',
+                'status',
+            ])
+            ->where('person_id', $user->person->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        $solicitudes = Solicitud::with('person')->get();
+        return view('solicitud::instructor.history', compact('solicitudes'));
+    }
+
+    
+
+    /**
+     * Guarda una nueva solicitud y los bienes solicitados
+     */
+    public function store_instructor(Request $request)
+    {
+         $user = auth()->user();
+
+        $solicitud = new Solicitud();
+        $solicitud->request_date = $request->request_date;
+        $solicitud->mba_area = $request->mba_area;
+        $solicitud->regional_code = $request->regional_code;
+        $solicitud->regional_name = $request->regional_name;
+        $solicitud->cost_center_code = $request->cost_center_code;
+        $solicitud->cost_center_name = $request->cost_center_name;
+        $solicitud->office_manager_name = $request->office_manager_name;
+        $solicitud->accountable_type = $request->accountable_type;
+        $solicitud->accountable_number = $request->accountable_number;
+        $solicitud->destinations_requested_goods = $request->destinations_requested_goods;
+        $solicitud->group_or_record_code = $request->group_or_record_code;
+
+        // Forzar que el person_id sea el del usuario autenticado
+        $solicitud->person_id = auth()->user()->person->id;
+
+        $solicitud->movement_type_id = $request->movement_type_id;
+
+        // Bienes solicitados (primera fila)
+        $solicitud->sena_code = $request->sena_code[0] ?? null;
+        $solicitud->item_description = $request->item_description[0] ?? null;
+        $solicitud->measurement_unit = $request->measurement_unit[0] ?? null;
+        $solicitud->requested_quantity = $request->requested_quantity[0] ?? null;
+        $solicitud->delivered_quantity = $request->delivered_quantity[0] ?? null;
+        $solicitud->observation = $request->observation[0] ?? null;
+
+        // Estado inicial
+        $solicitud->status = 'pending';
+
+        $solicitud->save();
+
+        return redirect()->route('solicitud.instructor.history')->with('success', 'Solicitud enviada correctamente');
+    }
+
+    public function destroy_instructor($id)
+    {
+        $solicitud = Solicitud::findOrFail($id);
+        $solicitud->delete();
+
+        return redirect()->route('solicitud.instructor.history')->with('success', 'Solicitud eliminada correctamente');
+    }
+    
+
+    /**
+     * Muestra los movimientos de inventario del instructor
+     */
+    public function movements_instructor()
+    {
+        $user = auth()->user();
+
+        $movimientos = Solicitud::with('materiales')
+            ->where('person_id', $user->person->id)
+            ->orderByDesc('created_at')
+            ->paginate(10);
+
+        return view('solicitud::instructor.movements', compact('movimientos'));
+    }
 }
-}
+
