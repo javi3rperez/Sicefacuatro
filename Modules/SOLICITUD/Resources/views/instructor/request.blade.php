@@ -180,7 +180,6 @@
             <th style="width: 10%;">Cantidad solicitada</th>
             <th style="width: 20%;">Cantidad entregada</th>
             <th style="width: 20%;">Observaciones</th>
-            <th style="width: 10%;">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -189,17 +188,13 @@
             <td><input type="text" name="item_description[]" required /></td>
             <td><input type="text" name="measurement_unit[]" required /></td>
             <td><input type="text" name="requested_quantity[]" required /></td>
-            <td><input type="text" name="delivered_quantity[]" required /></td>
+            <td><input type="text" name="delivered_quantity[]"/></td>
             <td><input type="text" name="observation[]" /></td>
-            <td>
-              <button type="button" class="btn-small btn-danger" onclick="eliminarFila(this)">🗑</button>
-            </td>
+            
           </tr>
         </tbody>
       </table>
 
-      <br>
-      <button type="button" class="btn-small btn-secondary" onclick="agregarFila()">➕ Agregar Fila</button>
 
       <br><br><br>
 

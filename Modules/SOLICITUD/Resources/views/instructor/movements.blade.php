@@ -68,37 +68,34 @@
         </div>
         <table>
             <thead>
-                <tr>
+                <tr> 
                     <th>ID</th>
                     <th>Tipo de Movimiento</th>
-                    <th>Cantidad</th>
-                    <th>Ubicación</th>
-                    <th>Categoría</th>
-                    <th>Producto</th>
+                    <th>Almacén</th>
+                    <th>Elemento</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse($movimientos as $movimiento)
+                @forelse($movimientos as $movimiento) 
                     <tr>
                         <td>{{ $movimiento->id }}</td>
                         <td>
                             <span class="badge">
-                                {{ ucfirst($movimiento->tipo) }}
+                                {{ $movimiento->movementType->name ?? 'Sin tipo' }}
                             </span>
                         </td>
-                        <td>{{ $movimiento->cantidad }}</td>
-                        <td>{{ $movimiento->ubicacion }}</td>
-                        <td>{{ $movimiento->categoria }}</td>
-                        <td>{{ $movimiento->producto }}</td>
+                        <td>{{ $movimiento->request->cost_center_name ?? 'Sin almacén' }}</td>
+                        <td>{{ $movimiento->request->item_description ?? 'Sin elemento' }}</td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="empty-message">
+                        <td colspan="5" class="empty-message">
                             <i class="fas fa-info-circle"></i> No hay movimientos registrados
                         </td>
                     </tr>
                 @endforelse
             </tbody>
+
         </table>
     </div>
 </div>

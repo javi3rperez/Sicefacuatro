@@ -10,9 +10,9 @@ class Person extends Model
     use HasFactory;
 
     protected $fillable = [];
-    
-    protected static function newFactory()
+
+    public function requests()
     {
-        return \Modules\SOLICITUD\Database\factories\PersonFactory::new();
+        return $this->hasMany(Request::class, 'person_id');
     }
 }

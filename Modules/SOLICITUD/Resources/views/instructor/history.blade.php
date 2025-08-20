@@ -63,7 +63,7 @@
         border-bottom-right-radius: 0.75rem;
     }
 
-    /* Estados con colores verdes */
+    /* Estados con colores */
     .badge-status {
         font-size: 0.85rem;
         padding: 0.4em 0.9em;
@@ -126,9 +126,9 @@
             <form method="GET" action="{{ route('solicitud.instructor.index') }}">
                 <select name="estado" class="form-select filter-select" onchange="this.form.submit()">
                     <option value="">Todos los estados</option>
-                    <option value="aceptada" {{ request('estado') == 'aceptada' ? 'selected' : '' }}>Aceptadas</option>
-                    <option value="rechazada" {{ request('estado') == 'rechazada' ? 'selected' : '' }}>Rechazadas</option>
-                    <option value="pendiente" {{ request('estado') == 'pendiente' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="approved" {{ request('estado') == 'approved' ? 'selected' : '' }}>Aceptadas</option>
+                    <option value="rejected" {{ request('estado') == 'rejected' ? 'selected' : '' }}>Rechazadas</option>
+                    <option value="pending" {{ request('estado') == 'pending' ? 'selected' : '' }}>Pendientes</option>
                 </select>
             </form>
         </div>
@@ -146,13 +146,25 @@
                 </thead>
                 <tbody>
                     @forelse($solicitudes as $solicitud)
+                        @php
+                            // Mapa de traducción y clase de badge
+                            $estados = [
+                                'pending'  => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
+                                'approved' => ['texto' => 'Aceptada', 'clase' => 'aceptada'],
+                                'rejected' => ['texto' => 'Rechazada', 'clase' => 'rechazada'],
+                                'completed'=> ['texto' => 'Completada', 'clase' => 'aceptada'],
+                            ];
+
+                            $estadoTexto = $estados[$solicitud->status]['texto'] ?? ucfirst($solicitud->status);
+                            $estadoClase = $estados[$solicitud->status]['clase'] ?? 'pendiente';
+                        @endphp
                         <tr>
                             <td>{{ $solicitud->id }}</td>
                             <td>{{ $solicitud->observation }}</td>
                             <td>{{ \Carbon\Carbon::parse($solicitud->request_date)->format('d/m/Y') }}</td>
                             <td>
-                                <span class="text-dark badge-{{ $solicitud->status }}" >
-                                    {{ ucfirst($solicitud->status) }}
+                                <span class="text-dark badge-{{ $estadoClase }}">
+                                    {{ $estadoTexto }}
                                 </span>
                             </td>
                             
@@ -166,9 +178,6 @@
                                 </form>
                             </td>
                         </tr>
-
-                       
-
                     @empty
                         <tr class="no-data-row">
                             <td colspan="5">No hay solicitudes registradas.</td>

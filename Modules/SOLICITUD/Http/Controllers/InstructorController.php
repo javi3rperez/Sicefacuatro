@@ -7,7 +7,8 @@ use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Inventory;
 use Modules\SOLICITUD\Entities\Request as Solicitud; 
 use Modules\SOLICITUD\Entities\Person;
-use Modules\SICA\Entities\MovementType;
+use Modules\SOLICITUD\Entities\Movement;
+use Modules\SOLICITUD\Entities\MovementType;
 
 class InstructorController extends Controller
 {
@@ -45,7 +46,7 @@ class InstructorController extends Controller
      /**
      * Muestra el historial de solicitudes del instructor
      */
-   public function history_instructor()
+    public function history_instructor()
     {
         $user = auth()->user();
 
@@ -53,29 +54,37 @@ class InstructorController extends Controller
             return back()->withErrors('No hay una persona asociada a este usuario.');
         }
 
-        $solicitudes = Solicitud::select([
+        // capturamos el filtro
+        $estado = request('estado');
+
+        // construimos la consulta base
+        $query = Solicitud::select([
                 'id',
                 'observation',
                 'request_date',
                 'status',
             ])
             ->where('person_id', $user->person->id)
-            ->orderByDesc('created_at')
-            ->paginate(10);
+            ->orderByDesc('created_at');
 
-        $solicitudes = Solicitud::with('person')->get();
+        // aplicamos filtro si se seleccionó estado
+        if (!empty($estado)) {
+            $query->where('status', $estado);
+        }
+
+        // ejecutamos la consulta con paginación y mantenemos parámetros GET
+        $solicitudes = $query->paginate(10)->withQueryString();
+
         return view('solicitud::instructor.history', compact('solicitudes'));
     }
 
-    
 
-    /**
-     * Guarda una nueva solicitud y los bienes solicitados
-     */
+    
     public function store_instructor(Request $request)
     {
-         $user = auth()->user();
+        $user = auth()->user();
 
+        // Crear la solicitud
         $solicitud = new Solicitud();
         $solicitud->request_date = $request->request_date;
         $solicitud->mba_area = $request->mba_area;
@@ -88,13 +97,10 @@ class InstructorController extends Controller
         $solicitud->accountable_number = $request->accountable_number;
         $solicitud->destinations_requested_goods = $request->destinations_requested_goods;
         $solicitud->group_or_record_code = $request->group_or_record_code;
-
-        // Forzar que el person_id sea el del usuario autenticado
-        $solicitud->person_id = auth()->user()->person->id;
-
+        $solicitud->person_id = $user->person->id;
         $solicitud->movement_type_id = $request->movement_type_id;
 
-        // Bienes solicitados (primera fila)
+        // Primer bien de la solicitud
         $solicitud->sena_code = $request->sena_code[0] ?? null;
         $solicitud->item_description = $request->item_description[0] ?? null;
         $solicitud->measurement_unit = $request->measurement_unit[0] ?? null;
@@ -102,13 +108,33 @@ class InstructorController extends Controller
         $solicitud->delivered_quantity = $request->delivered_quantity[0] ?? null;
         $solicitud->observation = $request->observation[0] ?? null;
 
-        // Estado inicial
+        // Estado inicial de la solicitud
         $solicitud->status = 'pending';
-
         $solicitud->save();
+
+        // Crear movimiento asociado
+        $stateMap = [
+            'pending'   => 'Solicitado',
+            'approved'  => 'Aprobado',
+            'rejected'  => 'Rechazado',
+            'completed' => 'Devuelto',
+        ];
+
+        $movement = new Movement();
+        $movement->request_id = $solicitud->id;
+        $movement->movement_type_id = $solicitud->movement_type_id;
+        $movement->observation = $solicitud->observation;
+        $movement->state = $stateMap[$solicitud->status] ?? 'Solicitado';
+        $movement->registration_date = now();
+        $movement->voucher_number = 0; // si es obligatorio
+        $movement->price = 0;          // si es obligatorio
+        $movement->save();
 
         return redirect()->route('solicitud.instructor.history')->with('success', 'Solicitud enviada correctamente');
     }
+
+
+
 
     public function destroy_instructor($id)
     {
@@ -118,16 +144,18 @@ class InstructorController extends Controller
         return redirect()->route('solicitud.instructor.history')->with('success', 'Solicitud eliminada correctamente');
     }
     
-
-    /**
-     * Muestra los movimientos de inventario del instructor
-     */
     public function movements_instructor()
     {
         $user = auth()->user();
 
-        $movimientos = Solicitud::with('materiales')
-            ->where('person_id', $user->person->id)
+        if (!$user->person) {
+            return back()->withErrors('No hay una persona asociada a este usuario.');
+        }
+
+        $movimientos = Movement::with(['movementType', 'request'])
+            ->whereHas('request', function ($q) use ($user) {
+                $q->where('person_id', $user->person->id);
+            })
             ->orderByDesc('created_at')
             ->paginate(10);
 

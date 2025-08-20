@@ -67,12 +67,19 @@ Route::middleware(['lang'])->group(function(){
             
         //Instructor
         Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
+        //Ruta para el inventario del instructor
         Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
+        //Ruta para la solicitud del instructor
         Route::get('/instructor/request', [InstructorController::class, 'request_instructor'])->name('solicitud.instructor.request');
+        // Ruta para el historial del instructor
         Route::post('/instructor/store', [InstructorController::class, 'store_instructor'])->name('solicitud.instructor.store');
+        // Ruta para el historial de solicitudes del instructor
         Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        // Ruta para ver los movimientos del instructor
         Route::get('/instructor/movements', [InstructorController::class, 'movements_instructor'])->name('solicitud.instructor.movements');
+        
         Route::get('/instructor', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.index');
+        // Ruta para eliminar solicitudes del instructor
         Route::delete('/instructor/request/delete/{id}', [InstructorController::class, 'destroy_instructor'])->name('solicitud.instructor.destroy');
         
     });
