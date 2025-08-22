@@ -35,12 +35,20 @@ Route::middleware(['lang'])->group(function(){
     
         // INSTRUCTOR LIDER 
         Route::get('/leader/welcome', 'SOLICITUDController@leader')->name('solicitud.leader.welcome');
-        Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
-        Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
-        Route::get('/leader/history', [RequestController::class, 'index'])->name('solicitud.leader.index');
-        Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
-        Route::put('/leader/request/update/{id}', [RequestController::class, 'update'])->name('solicitud.leader.update');
-        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy'])->name('solicitud.leader.destroy');
+        //Ruta para el inventario 
+        Route::get('/leader/inventory', [RequestController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
+        //Ruta para la solicitud 
+        Route::get('/leader/request', [RequestController::class, 'request_leader'])->name('solicitud.leader.request');
+        // Ruta para el historial 
+        Route::post('/leader/store', [RequestController::class, 'store_leader'])->name('solicitud.leader.store');
+        // Ruta para el historial de solicitudes 
+        Route::get('/leader/history', [RequestController::class, 'history_leader'])->name('solicitud.leader.history');
+        // Ruta para ver los movimientos 
+        Route::get('/leader/movements', [RequestController::class, 'movements_leader'])->name('solicitud.leader.movements');
+
+        Route::get('/leader', [RequestController::class, 'history_leader'])->name('solicitud.leader.index');
+        // Ruta para eliminar solicitudes 
+        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy_leader'])->name('solicitud.leader.destroy');
 
 
 
@@ -70,9 +78,21 @@ Route::middleware(['lang'])->group(function(){
 
             
         //Instructor
+        Route::get('/instructor/welcome', 'SOLICITUDController@instructor')->name('solicitud.instructor.welcome');
+        //Ruta para el inventario del instructor
         Route::get('/instructor/inventory', [InstructorController::class, 'inventory_instructor'])->name('solicitud.instructor.inventory');
+        //Ruta para la solicitud del instructor
         Route::get('/instructor/request', [InstructorController::class, 'request_instructor'])->name('solicitud.instructor.request');
-        Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        // Ruta para el historial del instructor
         Route::post('/instructor/store', [InstructorController::class, 'store_instructor'])->name('solicitud.instructor.store');
+        // Ruta para el historial de solicitudes del instructor
+        Route::get('/instructor/history', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.history');
+        // Ruta para ver los movimientos del instructor
+        Route::get('/instructor/movements', [InstructorController::class, 'movements_instructor'])->name('solicitud.instructor.movements');
+        
+        Route::get('/instructor', [InstructorController::class, 'history_instructor'])->name('solicitud.instructor.index');
+        // Ruta para eliminar solicitudes del instructor
+        Route::delete('/instructor/request/delete/{id}', [InstructorController::class, 'destroy_instructor'])->name('solicitud.instructor.destroy');
+        
     });
-});
+}); 

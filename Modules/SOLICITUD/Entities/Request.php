@@ -4,48 +4,48 @@ namespace Modules\SOLICITUD\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\SICA\Entities\Person;
-use Modules\SICA\Entities\ProductiveUnitWarehouse;
-use Modules\SICA\Entities\MovementType;
+use Modules\SOLICITUD\Entities\Person;
+use Modules\SOLICITUD\Entities\ProductiveUnitWarehouse;
+use Modules\SOLICITUD\Entities\Movement;
+use Modules\SOLICITUD\Entities\MovementType;
 
 class Request extends Model
 {
     use HasFactory;
 
-     protected $table = 'requests'; // Asegura que use la tabla correcta
+    protected $table = 'requests'; 
 
     protected $fillable = [
-        'name',
-        'program',
-        'product',
-        'batch',
-        'quantity',
-        'date'
+    'person_id',
+    'request_date' => 'date',
+    'status' => 'pending', 
+    'mba_area',
+    'regional_code',
+    'regional_name',
+    'cost_center_code',
+    'cost_center_name',
+    'office_manager_name',
+    'accountable_type',  
+    'accountable_number',
+    'destinations_requested_goods',
+    'group_or_record_code',
+    'movement_type_id', 
+    'sena_code',
+    'item_description',
+    'requested_quantity',
+    'delivered_quantity',
+    'observation',
+
     ];
     
-    protected static function newFactory()
-    {
-        return \Modules\SOLICITUD\Database\factories\RequestFactory::new();
-    }
+    
     public function person()
     {
-        return $this->belongsTo(Person::class, 'people_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
+        return $this->belongsTo(Person::class, 'person_id');
     }
 
-     public function productiveUnitWarehouse()
+    public function movements()
     {
-        return $this->belongsTo(ProductiveUnitWarehouse::class, 'productive_unit_warehouses_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
+        return $this->hasMany(Movement::class, 'request_id');
     }
-
-    public function movementtype()
-    {
-        return $this->belongsTo(MovementType::class, 'movement_types_id'); // Asegúrate que 'person_id' sea el nombre correcto de la FK
-    }
-
-    protected $dates = [
-    'request_date',
-    'required_date',
-    'created_at',
-    'updated_at'
-];
 }

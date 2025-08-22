@@ -12,6 +12,8 @@
         href="{{ asset('AdminLTE/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback') }}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('AdminLTE/dist/css/adminlte.min.css') }}">
     <!-- overlayScrollbars -->
@@ -196,6 +198,12 @@
                             <a href="{{ route('solicitud.instructor.history') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('solicitud.instructor.movements') }}" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-random" style="color: var(--primary-color);"></i>
+                                <p>Movimientos</p>
                             </a>
                         </li>
                     </ul>
