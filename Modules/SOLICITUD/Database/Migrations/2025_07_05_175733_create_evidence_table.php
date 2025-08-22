@@ -19,7 +19,9 @@ return new class extends Migration
                   ->constrained('categories')
                   ->onDelete('cascade')
                   ->comment('ID de la categoría asociada');
-            
+                  
+            $table->unsignedInteger('quantity'); // Cantidad
+
             $table->string('product_name', 100)
                   ->comment('Nombre del producto');
             $table->enum('movement_type', ['entry', 'exit'])
