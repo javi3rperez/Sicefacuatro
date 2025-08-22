@@ -15,9 +15,10 @@ class InstructorController extends Controller
 
     public function inventory_instructor()
     {
+        
         $inventoryData = Inventory::with([
             'element.category',       // nombre y categoría del producto
-            'productiveUnitWarehouse' // almacén del producto
+            'productiveUnitWarehouse' // almacén del producto 
         ])->get();
 
         $inventory = $inventoryData->map(function ($item) {
@@ -37,6 +38,7 @@ class InstructorController extends Controller
 
     public function request_instructor()
     {
+        // Cargar personas y tipos de movimiento para el formulario
         $persons = Person::all();
         $movement_types = MovementType::all();
         return view('solicitud::instructor.request', compact('persons', 'movement_types'));
@@ -50,6 +52,7 @@ class InstructorController extends Controller
     {
         $user = auth()->user();
 
+        // Verificamos que el usuario tenga una persona asociada
         if (!$user->person) {
             return back()->withErrors('No hay una persona asociada a este usuario.');
         }
@@ -108,7 +111,7 @@ class InstructorController extends Controller
         $solicitud->delivered_quantity = $request->delivered_quantity[0] ?? null;
         $solicitud->observation = $request->observation[0] ?? null;
 
-        // Estado inicial de la solicitud
+
         $solicitud->status = 'pending';
         $solicitud->save();
 
@@ -126,8 +129,8 @@ class InstructorController extends Controller
         $movement->observation = $solicitud->observation;
         $movement->state = $stateMap[$solicitud->status] ?? 'Solicitado';
         $movement->registration_date = now();
-        $movement->voucher_number = 0; // si es obligatorio
-        $movement->price = 0;          // si es obligatorio
+        $movement->voucher_number = 0; 
+        $movement->price = 0;          
         $movement->save();
 
         return redirect()->route('solicitud.instructor.history')->with('success', 'Solicitud enviada correctamente');

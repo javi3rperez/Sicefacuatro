@@ -15,6 +15,8 @@ class InventoryController extends Controller
      */
     public function inventory_leader()
     {
+        //consulta sql
+        //iner join para traer datos relacionados
         $inventory = DB::select("
             SELECT 
                 elements.image,
@@ -23,6 +25,8 @@ class InventoryController extends Controller
                 warehouses.name as warehouse_name, 
                 categories.name as category_name,
                 inventories.id
+       
+
             FROM inventories 
             INNER JOIN elements ON inventories.element_id = elements.id
             INNER JOIN productive_unit_warehouses ON inventories.productive_unit_warehouse_id = productive_unit_warehouses.id

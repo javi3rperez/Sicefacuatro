@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Evidence;
 use Illuminate\Support\Facades\DB;
-use Modules\SICA\Entities\Category;
+use Modules\SOLICITUD\Entities\Category;
 
 class EvidenceController extends Controller
 {

@@ -147,7 +147,6 @@
                 <tbody>
                     @forelse($solicitudes as $solicitud)
                         @php
-                            // Mapa de traducción y clase de badge
                             $estados = [
                                 'pending'  => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
                                 'approved' => ['texto' => 'Aceptada', 'clase' => 'aceptada'],
@@ -178,7 +177,7 @@
                                 </form>
                             </td>
                         </tr>
-                    @empty
+                        @empty
                         <tr class="no-data-row">
                             <td colspan="5">No hay solicitudes registradas.</td>
                         </tr>
