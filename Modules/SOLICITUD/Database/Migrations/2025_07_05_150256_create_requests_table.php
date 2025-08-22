@@ -22,7 +22,7 @@ return new class extends Migration
             
             // Campos de estado y prioridad
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
-            $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
+            $table->enum('status', ['Aceptado', 'Rechazado', 'En espera'])->default('pending');
             
         
             // Campos de información organizacional
@@ -38,8 +38,7 @@ return new class extends Migration
             $table->string('accountable_number', 50); // N° de cuentadante
             
             // Campos de destino
-            $table->text('destinations_requested_goods'); // Destinos de los bienes solicitados
-            
+            $table->text('destinations_requested_goods'); // Destinos de los bienes solicitados         
             // Campos de identificación de bienes
             $table->string('group_or_record_code', 50); // Código de grupo o ficha
             $table->string('sena_code', 50); // Código SENA
@@ -52,14 +51,6 @@ return new class extends Migration
             
             // Observación (opcional)
             $table->text('observation')->nullable();
-            
-            // Auditoría y timestamps
-            $table->foreignId('created_by')->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->softDeletes();
-            $table->timestamps();
-            
-            // SoftDeletes y timestamps
             $table->softDeletes();
             $table->timestamps();
         });

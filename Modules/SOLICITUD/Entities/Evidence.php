@@ -21,12 +21,15 @@ class Evidence extends Model
     protected $fillable = [
         'category_id',
         'lot_number',
+        'element_id',
         'product_name',
         'movement_type',
         'evidence_path',
         'comments',
+        'quantity',
         'user_id',
         'user_name'
+
     ];
 
     /**

@@ -23,30 +23,29 @@
     <!-- Filtros -->
     <div class="card mb-4 shadow-sm">
         <div class="card-body py-2">
-            <form>
-                <div class="row">
+            <form id="filterForm">
+                <div class="row align-items-end">
                     <div class="col-md-4">
-                        <div class="form-group mb-2">
-                            <label for="filterSearch" class="small font-weight-bold">Ingresar</label>
-                            <div class="input-group input-group-sm">
-                                <input type="text" class="form-control" id="filterSearch" placeholder="Producto, lote...">
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-success" type="button">
-                                        <i class="fas fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="form-group mb-0">
+                            <label for="productive_unit_warehousesFilter" class="small font-weight-bold">Filtrar por Almacen</label>
+                            <select class="form-control" id="productive_unit_warehousesFilter" name="productive_unit_warehouses">
+                                <option value="">Todas las categorías</option>
+                                <option value="Herramientas">Herramientas</option>
+                                <option value="Higiene">Higiene</option>
+                                <option value="Papelería">Papelería</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="col-md-2 d-flex align-items-end">
-                        <button type="button" class="btn btn-sm btn-success w-100">Buscar</button>
+                        <div class="col-md-4 text-right">
+                        <div class="d-flex justify-content-end align-items-end h-100">
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                    </div>
-                    <div class="col-md-3">
-                        <a href="#" class="btn btn-success btn-lg shadow-sm" data-toggle="modal" data-target="#addItemModal">
-                            <i class="fas fa-plus mr-2"></i>Agregar Producto
-                        </a>
+                    <div class="col-md-4 text-right">
+                        <div class="d-flex justify-content-end align-items-end h-100">
+                            <a href="#" class="btn btn-success btn-lg shadow-sm" data-toggle="modal" data-target="#addItemModal">
+                                <i class="fas fa-plus mr-8"></i>Agregar Producto
+                            </a>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -244,7 +243,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-           <form action="{{ route('solicitud.store.inventory.store') }}" method="POST" enctype="multipart/form-data">
+           <form action="{{ route('solicitud.store.inventory.create') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <h4>Nuevo Producto de Inventario</h4>
@@ -253,66 +252,63 @@
                         <!-- Primera columna -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label><strong>Nombre</strong></label>
-                                <input type="text" class="form-control" name="name" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label><strong>Almacén</strong></label>
-                                <select class="form-control select2" name="warehouse_id" required>
-                                    <option value="">Seleccione un almacén</option>
-                                    @foreach($warehouses as $warehouse)
-                                        <option value="{{ $warehouse->id }}">{{ $warehouse->name }}</option>
+                                <label><strong>Almacen de unidad productiva</strong></label>
+                                <select class="form-control select2" name="productive_unit_warehouse_id" required>
+                                    <option value="">Seleccione una unidad productiva</option>
+                                    @foreach($productiveWarehouses as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->productive_unit_name }} - {{ $item->warehouse_name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label><strong>Categoría</strong></label>
+                                <label><strong>Elemento</strong></label>
+                                <select class="form-control select2" name="element_id" required>
+                                    <option value="">Seleccione un elemento</option>
+                                    @foreach($elements as $element)
+                                        <option value="{{ $element->id }}">{{ $element->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Destino</strong></label>
                                 <select class="form-control select2" name="category_id" required>
-                                    <option value="">Seleccione una categoría</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                    @endforeach
+                                    <option value="">Seleccione un destino</option>
+                                    <option value="Produccion">Produccion</option>
+                                    <option value="Formacion">Formacion</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label><strong>Stock</strong></label>
-                                <input type="number" class="form-control" name="stock" min="0" required>
+                                <label><strong>Estado</strong></label>
+                                <select class="form-control select2" name="category_id" required>
+                                    <option value="">Seleccione estado</option>
+                                    <option value="Disponibles">Disponibles</option>
+                                    <option value="No disponible">No disponible</option>
+                                </select>
                             </div>
 
-                            <div class="form-group">
-                                <label><strong>Descripción</strong></label>
-                                <input type="text" class="form-control" name="description" required>
-                            </div>
+
                         </div>
 
                         <!-- Segunda columna -->
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Descripción</strong></label>
+                                <input type="text" class="form-control" name="description" required>
+                            </div>
+                            
                             <div class="form-group">
                                 <label><strong>Precio</strong></label>
                                 <input type="number" class="form-control" name="price" required>
                             </div>
 
                             <div class="form-group">
-                                <label><strong>Personas</strong></label>
-                                <input type="text" class="form-control" name="person_id" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label><strong>Almacén de unidad productiva</strong></label>
-                                <input type="text" class="form-control" name="productive_unit_warehouse_id" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label><strong>Fecha de producción</strong></label>
-                                <input type="date" class="form-control" name="production_date" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label><strong>Destino</strong></label>
-                                <input type="text" class="form-control" name="destination" required>
+                                <label><strong>Stock</strong></label>
+                                <input type="number" class="form-control" name="stock" min="0" required>
                             </div>
 
                             <div class="form-group">
@@ -389,7 +385,7 @@
     });
 
     // Filtros interactivos (ejemplo básico)
-    document.getElementById('filterSearch').addEventListener('keyup', function() {
+    document.getElementById('searchFilter').addEventListener('keyup', function() {
         const searchValue = this.value.toLowerCase();
         document.querySelectorAll('.card-title').forEach(function(title) {
             const card = title.closest('.card');
@@ -400,5 +396,43 @@
             }
         });
     });
+
+    // Filtrar por categoría y búsqueda
+    $('#categoryFilter, #searchFilter').on('change keyup', function() {
+        filterInventory();
+    });
+
+    function filterInventory() {
+        var category = $('#categoryFilter').val().toLowerCase();
+        var searchText = $('#searchFilter').val().toLowerCase();
+        
+        $('.inventory-item').each(function() {
+            var itemCategory = $(this).data('category').toLowerCase();
+            var itemName = $(this).data('name').toLowerCase();
+            var showItem = true;
+            
+            // Filtrar por categoría
+            if (category && itemCategory !== category) {
+                showItem = false;
+            }
+            
+            // Filtrar por texto de búsqueda
+            if (searchText && itemName.indexOf(searchText) === -1) {
+                showItem = false;
+            }
+            
+            // Mostrar u ocultar elemento
+            if (showItem) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    // Limpiar filtros al recargar la página (opcional)
+    $('#categoryFilter').val('');
+    $('#searchFilter').val('');
+});
 </script>
 @endsection
