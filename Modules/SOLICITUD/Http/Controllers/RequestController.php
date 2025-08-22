@@ -5,7 +5,7 @@ namespace Modules\SOLICITUD\Http\Controllers;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\SOLICITUD\Entities\Request as Solicitud; // ✅ ESTA LÍNEA ES CLAVE
+use Modules\SOLICITUD\Entities\Request as Solicitud; 
 
 class RequestController extends Controller
 {
@@ -14,19 +14,19 @@ class RequestController extends Controller
      * @return Renderable
      */
     public function index( Request $request)
-{
-    $estado = $request->input('estado');
+    {
+        $estado = $request->input('estado');
 
-    $query = Solicitud::query();
+        $query = Solicitud::query();
 
-    if ($estado) {
-        $query->where('estado', $estado);
+        if ($estado) {
+            $query->where('estado', $estado);
+        }
+
+        $solicitudes = $query->orderBy('created_at', 'desc')->get();
+
+        return view('solicitud::leader.history', compact('solicitudes', 'estado'));
     }
-
-    $solicitudes = $query->orderBy('created_at', 'desc')->get();
-
-    return view('solicitud::leader.history', compact('solicitudes', 'estado'));
-}
 
 
     /**
@@ -44,20 +44,20 @@ class RequestController extends Controller
      * @return Renderable
      */
     public function store(Request $request)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'program' => 'required|string|max:255',
-        'batch' => 'required|string|max:255',
-        'product' => 'required|string|max:255',
-        'quantity' => 'required|integer|min:1',
-        'date' => 'required|date'
-    ]);
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'program' => 'required|string|max:255',
+            'batch' => 'required|string|max:255',
+            'product' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'date' => 'required|date'
+        ]);
 
-    Solicitud::create($validated);
+        Solicitud::create($validated);
 
-    return redirect()->back()->with('success', 'Solicitud enviada correctamente.');
-}
+        return redirect()->back()->with('success', 'Solicitud enviada correctamente.');
+    }
     /**
      * Show the specified resource.
      * @param int $id
