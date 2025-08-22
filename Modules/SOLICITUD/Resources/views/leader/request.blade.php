@@ -1,93 +1,227 @@
 @extends('solicitud::layouts.masterleader') 
 
 @section('content')
-<style>
+
+  <title>Formato Solicitud de Bienes</title>
+  <style>
+    body {
+      font-family: Arial;
+      font-size: 14px;
+      margin: 20px;
+    }
+    h2, h4 { text-align: center; }
     .form-container {
-        max-width: 400px;
-        margin: 3rem auto;
-        padding: 2rem;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      max-width: 900px;
+      margin: auto;
+      border: 1px solid #000;
+      padding: 20px;
+      overflow-x: auto;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      table-layout: fixed;
+    }
+    table, th, td { border: 1px solid black; }
+    th, td { padding: 4px; text-align: center; }
+    table input[type="text"] {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 2px;
+      border: none;
+      outline: none;
+      text-align: center;
+      background: transparent;
+      font-family: inherit;
+      font-size: inherit;
+    }
+    .flex-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .form-section { margin-bottom: 20px; }
+    label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    input[type="text"], input[type="date"], select {
+      width: 250px;
+      padding: 5px;
+      margin-bottom: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+    }
+    .signature-complete {
+      margin-top: 40px;
+      font-size: 14px;
+    }
+    .signature-line {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      flex-wrap: wrap;
+    }
+    .signature-line label {
+      font-weight: bold;
+      margin-right: 5px;
+    }
+    .signature-line .underline {
+      border-bottom: 1px solid #000;
+      padding: 2px 80px;
+      margin-right: 20px;
+      display: inline-block;
+      min-width: 150px;
+    }
+    button {
+      padding: 10px 30px;
+      background-color: #2fa933ff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 8px; 
+    }
+    button:hover { background-color: #45a049; }
+    @media screen and (max-width: 768px) {
+      .flex-row { flex-direction: column; }
+      input[type="text"], input[type="date"], select { width: 100%; }
+      table { display: block; overflow-x: auto; }
+    }
+    .btn-small {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      margin: 2px;
+    }
+    .btn-danger { background-color: red; }
+    .btn-secondary { background-color: gray; }
+  </style>
+
+  
+  <form action="{{ route('solicitud.leader.store') }}" method="POST">
+    @csrf
+    <div class="form-container">
+      
+      <div style="background-color: #2c2c2c; color: white; text-align: center; padding: 10px 0;">
+        <div style="font-size: 16px;">PROCESO GESTIÓN DE INFRAESTRUCTURA Y LOGÍSTICA</div>
+        <div style="font-size: 14px;">FORMATO SOLICITUD DE BIENES PARA USO DE CUSTODIANTES</div>
+      </div>
+
+      <br><br>
+
+      <div class="form-section">
+        <div class="flex-row">
+          <label>Fecha Solicitud:</label>
+          <input type="date" name="request_date" required />
+          <label>Área:</label>
+          <input type="text" name="mba_area" required />
+        </div>
+        <div class="flex-row">
+          <label>Código Regional</label>
+          <input type="text" name="regional_code" required />
+          <label>Nombre Regional</label>
+          <input type="text" name="regional_name" required />
+        </div> 
+        <div class="flex-row">
+          <label>COD centro de costo</label>
+          <input type="text" name="cost_center_code" required />
+          <label>Nombre centro de costo</label>
+          <input type="text" name="cost_center_name" required />
+        </div>
+        
+        <label>Nombre de jefe de oficina o Coordinador de área</label>
+        <input type="text" name="office_manager_name" required />
+        
+        <br><br>
+        <label>Tipo de cuentadante</label>
+        <select name="accountable_type" required>
+          <option value="">Seleccione...</option>
+          <option value="Unipersonal">Unipersonal</option>
+          <option value="Múltiple">Múltiple</option>
+        </select>
+        
+        <br><br>
+        <label>Nombre de cuentadante</label>
+        <input type="text" name="accountable_name" required />
+        
+        <br><br>
+        <label>Número de cuentadante</label>
+        <input type="text" name="accountable_number" required />
+        
+        <br><br>
+        <label>Destino de los bienes solicitados</label>
+        <input type="text" name="destinations_requested_goods" required />
+        
+        <br><br>
+        <label>Código de grupo o ficha de caracterización</label>
+        <input type="text" name="group_or_record_code" required />
+      </div>
+
+      <label>Tipo de movimiento</label>
+      <select name="movement_type_id" required>
+        <option value="">Seleccione tipo de movimiento...</option>
+        @foreach($movement_types as $type)
+          <option value="{{ $type->id }}">{{ $type->name }}</option>
+        @endforeach
+      </select>
+      <br><br>
+
+      <table id="tabla-bienes">
+        <thead>
+          <tr>
+            <th style="width: 15%;">Código SENA</th>
+            <th style="width: 25%;">Descripción del Bien</th>
+            <th style="width: 10%;">Unidad de medida</th>
+            <th style="width: 10%;">Cantidad solicitada</th>
+            <th style="width: 20%;">Cantidad entregada</th>
+            <th style="width: 20%;">Observaciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="text" name="sena_code[]" required /></td>
+            <td><input type="text" name="item_description[]" required /></td>
+            <td><input type="text" name="measurement_unit[]" required /></td>
+            <td><input type="text" name="requested_quantity[]" required /></td>
+            <td><input type="text" name="delivered_quantity[]" disabled/></td>
+            <td><input type="text" name="observation[]" /></td>
+            
+          </tr>
+        </tbody>
+      </table>
+
+
+      <br><br>
+      <br>
+      <div style="text-align: center; margin-top: 20px;">
+        <button type="submit">Solicitar</button>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    function agregarFila() {
+      let tabla = document.getElementById("tabla-bienes").getElementsByTagName('tbody')[0];
+      let nuevaFila = tabla.rows[0].cloneNode(true);
+
+      nuevaFila.querySelectorAll("input").forEach(input => input.value = "");
+      tabla.appendChild(nuevaFila);
     }
 
-    .form-container h3 {
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 1.5rem;
-        border-bottom: 2px solid #dee2e6;
-        padding-bottom: 0.5rem;
+    function eliminarFila(boton) {
+      let fila = boton.closest("tr");
+      let tabla = fila.parentNode;
+      if (tabla.rows.length > 1) {
+        fila.remove();
+      } else {
+        alert("Debe existir al menos una fila.");
+      }
     }
+  </script>
 
-    .form-group {
-        margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-        font-weight: 500;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.6rem;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-    }
-
-    .btn-success {
-        width: 100%;
-        padding: 0.7rem;
-        font-weight: bold;
-        border-radius: 5px;
-    }
-</style>
-
-<div class="form-container">
-    <h3>Solicitud</h3>
-
-    {{-- Mensaje de éxito --}}
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <form method="POST" action="{{ route('solicitud.leader.store') }}">
-        @csrf
-
-        <div class="form-group">
-            <label for="name">Nombre</label>
-            <input type="text" name="name" id="name" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="program">Programa</label>
-            <input type="text" name="program" id="program" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="batch">Lote</label>
-            <input type="text" name="batch" id="batch" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="product">Producto</label>
-            <input type="text" name="product" id="product" class="form-control" required>
-        </div>
-
-        <div class="form-group">
-            <label for="quantity">Cantidad</label>
-            <input type="number" name="quantity" id="quantity" class="form-control" required min="1">
-        </div>
-
-        <div class="form-group">
-            <label for="date">Fecha</label>
-            <input type="date" name="date" id="date" class="form-control" required>
-        </div>
-
-        <button type="submit" class="btn btn-success">Solicitar</button>
-    </form>
-</div>
 @endsection

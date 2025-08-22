@@ -187,15 +187,21 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('solicitud.leader.create') }}" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.leader.request') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-plus-circle" style="color: var(--primary-color);"></i>
                                 <p>Crear Solicitud</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('solicitud.leader.index') }}" class="nav-link" style="color: var(--dark-color);">
+                            <a href="{{ route('solicitud.leader.history') }}" class="nav-link" style="color: var(--dark-color);">
                                 <i class="nav-icon fas fa-list" style="color: var(--primary-color);"></i>
                                 <p>Historial</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('solicitud.leader.movements') }}" class="nav-link" style="color: var(--dark-color);">
+                                <i class="nav-icon fas fa-random" style="color: var(--primary-color);"></i>
+                                <p>Movimientos</p>
                             </a>
                         </li>
                     </ul>

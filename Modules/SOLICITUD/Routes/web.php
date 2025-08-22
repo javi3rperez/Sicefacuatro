@@ -35,12 +35,20 @@ Route::middleware(['lang'])->group(function(){
     
         // INSTRUCTOR LIDER 
         Route::get('/leader/welcome', 'SOLICITUDController@leader')->name('solicitud.leader.welcome');
-        Route::get('/leader/inventory', [InventoryController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
-        Route::get('/leader/request', [RequestController::class, 'create'])->name('solicitud.leader.create');
-        Route::get('/leader/history', [RequestController::class, 'index'])->name('solicitud.leader.index');
-        Route::post('/leader/store', [RequestController::class, 'store'])->name('solicitud.leader.store');
-        Route::put('/leader/request/update/{id}', [RequestController::class, 'update'])->name('solicitud.leader.update');
-        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy'])->name('solicitud.leader.destroy');
+        //Ruta para el inventario 
+        Route::get('/leader/inventory', [RequestController::class, 'inventory_leader'])->name('solicitud.leader.inventory');
+        //Ruta para la solicitud 
+        Route::get('/leader/request', [RequestController::class, 'request_leader'])->name('solicitud.leader.request');
+        // Ruta para el historial 
+        Route::post('/leader/store', [RequestController::class, 'store_leader'])->name('solicitud.leader.store');
+        // Ruta para el historial de solicitudes 
+        Route::get('/leader/history', [RequestController::class, 'history_leader'])->name('solicitud.leader.history');
+        // Ruta para ver los movimientos 
+        Route::get('/leader/movements', [RequestController::class, 'movements_leader'])->name('solicitud.leader.movements');
+
+        Route::get('/leader', [RequestController::class, 'history_leader'])->name('solicitud.leader.index');
+        // Ruta para eliminar solicitudes 
+        Route::delete('/leader/request/delete/{id}', [RequestController::class, 'destroy_leader'])->name('solicitud.leader.destroy');
 
 
 

@@ -123,7 +123,7 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader); 
 
         // Permiso para CRUD CREAR SOLICITUD ROL INSTRUCTOR LIDER
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.create'], [
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.request'], [
                 'name' => 'Acceso al Rol de instructor lider para solicitud',
                 'description' => 'Acceso al Rol de instructor lider',
                 'description_english' => 'Access to the instructor lead Role',
@@ -145,8 +145,8 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
         // Permiso para CRUD HISTORIAL DE SOLICITUDES ROL INSTRUCTOR LIDER
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.index'], [
-                'name' => 'Acceso al Rol de instructor lider para solicitud',
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.history'], [
+                'name' => 'Acceso al Rol de instructor lider para ver historial',
                 'description' => 'Acceso al Rol de instructor lider',
                 'description_english' => 'Access to the instructor lead Role',
                 'app_id' => $app->id
@@ -156,8 +156,19 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
         
-        // Permiso para EDITAR HISTORIAL ROL INSTRUCTOR LIDER
-        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.update'], [
+        // Permiso para VER MOVIMIENTOS DEL INSTRUCTOR LIDER 
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.movements'], [
+            'name' => 'Acceso al Rol de instructor lider para movimientos',
+            'description' => 'Acceso al Rol de instructor lider',
+            'description_english' => 'Access to the instructor lead Role',
+            'app_id' => $app->id
+        ]);
+        $permissions_leader[] = $permission->id;
+        $rol_leader = Role::where('slug','solicitud.leader')->first(); 
+        $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
+
+        
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.index'], [
             'name' => 'Acceso al Rol de instructor lider para historial de solicitudes',
             'description' => 'Acceso al Rol de instructor lider',
             'description_english' => 'Access to the instructor lead Role',
@@ -167,7 +178,7 @@ class PermissionsTableSeeder extends Seeder
         $rol_leader = Role::where('slug','solicitud.leader')->first(); 
         $rol_leader->permissions()->syncWithoutDetaching($permissions_leader);
 
-        // Permiso para ELIMINAR HISTORIAL ROL INSTRUCTOR LIDER
+          // Permiso para ELIMINAR 
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.leader.destroy'], [
             'name' => 'Acceso al Rol de instructor lider para historial de solicitudes',
             'description' => 'Acceso al Rol de instructor lider',
