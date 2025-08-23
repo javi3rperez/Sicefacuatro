@@ -168,7 +168,7 @@
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #ffffff; border-right: 1px solid #eaeaea;">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link" style="text-decoration:none">
+            <a href="{{ route('solicitud.store.welcome') }}" class="brand-link" style="text-decoration:none">
                 <img src="{{ asset('AdminLTE/dist/img/logos.gif') }}" alt="Logo"
                     class="brand-image" style="opacity: .9">
                 <span class="brand-text font-weight-light" >Solicitudes</span>

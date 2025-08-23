@@ -20,6 +20,7 @@ class RecordController extends Controller
 
     public function record_warehouseadmin()
     {
+        //arreglo con datos simulados
         $record = [
             ['id' => 1, 'Solicitud' => 'Herramientas', 'Estado' => 'Aceptado'],
             ['id' => 2, 'Solicitud' => 'Papeleria', 'Estado' => 'Aceptado'],

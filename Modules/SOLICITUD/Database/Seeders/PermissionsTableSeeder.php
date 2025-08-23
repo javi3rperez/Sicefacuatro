@@ -218,6 +218,7 @@ class PermissionsTableSeeder extends Seeder
         $permissions_store[] = $permission->id;
         $rol_store = Role::where('slug','solicitud.store')->first(); 
         $rol_store->permissions()->syncWithoutDetaching($permissions_store); 
+        
         //Permiso para crear un producto para el rol de almacenista
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.inventory.create'], [
                 'name' => 'Acceso al Rol de almacenista para inventario',
@@ -228,6 +229,8 @@ class PermissionsTableSeeder extends Seeder
         $permissions_store[] = $permission->id;
         $rol_store = Role::where('slug','solicitud.store')->first(); 
         $rol_store->permissions()->syncWithoutDetaching($permissions_store); 
+
+
         // Permiso para CRUD LISTA DE SOLICITUDES ROL ALMACENISTA
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.list'], [
             'name' => 'Acceso al Rol de almacenista para listas de solicitud',
@@ -254,6 +257,44 @@ class PermissionsTableSeeder extends Seeder
 
         // permiso para CRUD MOVIMIENTOS ROL ALMACENISTA
         $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.movements'], [
+            'name' => 'Acceso al Rol de almacenista para listas de solicitud',
+            'description' => 'Acceso al CRUD de listas de solicitud',
+            'description_english' => 'Access to List CRUD',
+            'app_id' => $app->id
+        ]);
+
+        $permissions_store[] = $permission->id;
+        $rol_store = Role::where('slug', 'solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store);
+
+
+
+            // permiso para CRUD MOVIMIENTOS ROL ALMACENISTA
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.store.movement.create'], [
+            'name' => 'Acceso al Rol de almacenista para listas de solicitud',
+            'description' => 'Acceso al CRUD de listas de solicitud',
+            'description_english' => 'Access to List CRUD',
+            'app_id' => $app->id
+        ]);
+
+        $permissions_store[] = $permission->id;
+        $rol_store = Role::where('slug', 'solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store);
+
+        // permiso para CRUD DE REPORTES ROL ALMACENISTA
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.report.movements'], [
+            'name' => 'Acceso al Rol de almacenista para listas de solicitud',
+            'description' => 'Acceso al CRUD de listas de solicitud',
+            'description_english' => 'Access to List CRUD',
+            'app_id' => $app->id
+        ]);
+
+        $permissions_store[] = $permission->id;
+        $rol_store = Role::where('slug', 'solicitud.store')->first(); 
+        $rol_store->permissions()->syncWithoutDetaching($permissions_store);
+
+                // permiso para CRUD DE REPORTES ROL ALMACENISTA
+        $permission = Permission::updateOrCreate(['slug' => 'solicitud.report.movements.download'], [
             'name' => 'Acceso al Rol de almacenista para listas de solicitud',
             'description' => 'Acceso al CRUD de listas de solicitud',
             'description_english' => 'Access to List CRUD',

@@ -4,14 +4,35 @@ namespace Modules\SOLICITUD\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\SOLICITUD\Entities\Inventory;
 use Modules\SOLICITUD\Entities\Request as Solicitud; 
-use Modules\SOLICITUD\Entities\Person;
-use Modules\SOLICITUD\Entities\Movement;
-use Modules\SOLICITUD\Entities\MovementType;
 
 class RequestController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     * @return Renderable
+     */
+    public function index( Request $request)
+    {
+        $estado = $request->input('estado');
+
+        $query = Solicitud::query();
+
+        if ($estado) {
+            $query->where('estado', $estado);
+        }
+
+        $solicitudes = $query->orderBy('created_at', 'desc')->get();
+
+        return view('solicitud::leader.history', compact('solicitudes', 'estado'));
+    }
+
+
+    /**
+     * Show the form for creating a new resource.
+     * @return Renderable
+     */
+
      public function inventory_leader()
     {
         $inventoryData = Inventory::with([
@@ -33,7 +54,31 @@ class RequestController extends Controller
         return view('solicitud::instructor.inventory', compact('inventory'));
     }
 
+    /**
+     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return Renderable
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'program' => 'required|string|max:255',
+            'batch' => 'required|string|max:255',
+            'product' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'date' => 'required|date'
+        ]);
 
+        Solicitud::create($validated);
+
+        return redirect()->back()->with('success', 'Solicitud enviada correctamente.');
+    }
+    /**
+     * Show the specified resource.
+     * @param int $id
+     * @return Renderable
+     */
     public function request_leader()
     {
         $persons = Person::all();
@@ -76,8 +121,6 @@ class RequestController extends Controller
 
         return view('solicitud::leader.history', compact('solicitudes'));
     }
-
-
     
     public function store_leader(Request $request)
     {

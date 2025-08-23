@@ -3,7 +3,7 @@
 namespace Modules\SOLICITUD\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
-use Modules\SICA\Entities\Person;
+use Modules\SOLICITUD\Entities\Person;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Request as Solicitud;
@@ -52,7 +52,7 @@ public function list_warehouseadmin(Request $request)
         $query->whereDate('created_at', $request->fecha);
     }
 
-    // Filtro por nombre (búsqueda parcial)
+    // Filtro por nombre 
     if ($request->filled('nombre')) {
         $query->where('name', 'like', '%'.$request->nombre.'%');
     }
