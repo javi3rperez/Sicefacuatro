@@ -121,6 +121,7 @@
 
 <div class="container-xl-custom">
     <div class="card-elevated">
+        <!-- Encabezado con filtro -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <h2 class="title-section mb-3 mb-md-0">Historial de Solicitudes</h2>
             <form method="GET" action="{{ route('solicitud.instructor.index') }}">
@@ -128,11 +129,13 @@
                     <option value="">Todos los estados</option>
                     <option value="approved" {{ request('estado') == 'approved' ? 'selected' : '' }}>Aceptadas</option>
                     <option value="rejected" {{ request('estado') == 'rejected' ? 'selected' : '' }}>Rechazadas</option>
-                    <option value="pending" {{ request('estado') == 'pending' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="pending"  {{ request('estado') == 'pending' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="completed" {{ request('estado') == 'completed' ? 'selected' : '' }}>Completadas</option>
                 </select>
             </form>
         </div>
 
+        <!-- Tabla -->
         <div class="table-responsive">
             <table class="table table-custom">
                 <thead>
@@ -141,6 +144,7 @@
                         <th>Detalle</th>
                         <th>Fecha</th>
                         <th>Estado</th>
+                        <th>Observación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -148,25 +152,43 @@
                     @forelse($solicitudes as $solicitud)
                         @php
                             $estados = [
-                                'pending'  => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
-                                'approved' => ['texto' => 'Aceptada', 'clase' => 'aceptada'],
-                                'rejected' => ['texto' => 'Rechazada', 'clase' => 'rechazada'],
-                                'completed'=> ['texto' => 'Completada', 'clase' => 'aceptada'],
+                                'pending'   => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
+                                'approved'  => ['texto' => 'Aprobada',  'clase' => 'aceptada'],
+                                'rejected'  => ['texto' => 'Rechazada', 'clase' => 'rechazada'],
+                                'completed' => ['texto' => 'Completada','clase' => 'aceptada'],
                             ];
-
-                            $estadoTexto = $estados[$solicitud->status]['texto'] ?? ucfirst($solicitud->status);
-                            $estadoClase = $estados[$solicitud->status]['clase'] ?? 'pendiente';
+                            $estado = $estados[$solicitud->status] 
+                                    ?? ['texto' => ucfirst($solicitud->status), 'clase' => 'pendiente'];
                         @endphp
+
                         <tr>
                             <td>{{ $solicitud->id }}</td>
-                            <td>{{ $solicitud->observation }}</td>
+                            <td>
+                                @if($solicitud->items && $solicitud->items->count() > 0)
+                                    @foreach($solicitud->items as $item)
+                                        <div>- {{ $item->item_description }}</div>
+                                    @endforeach
+                                @else
+                                    <div class="text-muted fst-italic">Sin detalle</div>
+                                @endif
+                            </td>
                             <td>{{ \Carbon\Carbon::parse($solicitud->request_date)->format('d/m/Y') }}</td>
                             <td>
-                                <span class="text-dark badge-{{ $estadoClase }}">
-                                    {{ $estadoTexto }}
+                                <span class="badge-status badge-{{ $estado['clase'] }}">
+                                    {{ $estado['texto'] }}
                                 </span>
                             </td>
-                            
+                            <td>
+                                @if($solicitud->items && $solicitud->items->count() > 0)
+                                    @foreach($solicitud->items as $item)
+                                        @if($item->observation)
+                                            <div class="text-muted">- {{ $item->observation }}</div>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <div class="text-muted fst-italic">Sin observación</div>
+                                @endif
+                            </td>
                             <td>
                                 <form action="{{ route('solicitud.instructor.destroy', $solicitud->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar esta solicitud?')">
                                     @csrf
@@ -177,9 +199,9 @@
                                 </form>
                             </td>
                         </tr>
-                        @empty
+                    @empty
                         <tr class="no-data-row">
-                            <td colspan="5">No hay solicitudes registradas.</td>
+                            <td colspan="6">No hay solicitudes registradas.</td>
                         </tr>
                     @endforelse
                 </tbody>

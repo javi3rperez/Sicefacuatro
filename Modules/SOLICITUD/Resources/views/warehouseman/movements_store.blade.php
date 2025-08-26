@@ -172,7 +172,7 @@
                     <button type="button" class="btn btn-outline-success" data-dismiss="modal">
                         <i class="fas fa-times mr-2"></i> Cancelar
                     </button>
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit', class="btn btn-success">
                         <i class="fas fa-filter mr-2"></i> Aplicar Filtros
                     </button>
                 </div>
@@ -202,8 +202,8 @@
                                 <label class="text-success font-weight-bold required-field">Tipo de Movimiento</label>
                                 <select class="form-control border-success" name="movement_type" required>
                                     <option value="">Seleccione...</option>
-                                    <option value="Movimiento Entrada">Movimiento Entrada</option>
-                                    <option value="Movimiento Interno">Movimiento Interno</option>
+                                    <option value="6">Movimiento Entrada</option>
+                                    <option value="2">Movimiento Interno</option>
                                 </select>
                                 <div class="error-message text-danger" id="movement_type_error"></div>
                             </div>
@@ -239,14 +239,32 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="text-success font-weight-bold required-field">Fecha Registro</label>
-                                <input type="datetime-local" class="form-control border-success" name="registration_date" required value="{{ old('registration_date', now()->format('Y-m-d\TH:i')) }}">
+                                <input type="text" class="form-control border-success bg-light" 
+                                    value="{{ now()->format('d/m/Y H:i') }}" readonly>
+                                <small class="form-text text-muted">Fecha actual (no editable)</small>
+                                <!-- Campo oculto para enviar el valor en el formato correcto al servidor -->
+                                <input type="hidden" name="registration_date" 
+                                    value="{{ now()->format('Y-m-d\TH:i') }}">
                                 <div class="error-message text-danger" id="registration_date_error"></div>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="form-group">
+                            <div class="form-group" style="position: relative;">
                                 <label class="text-success font-weight-bold required-field">Responsable</label>
-                                <select class="form-control border-success" name="responsible" required>
+                                
+                                <!-- Campo de búsqueda -->
+                                <div class="input-group mb-2">
+                                    <input type="text" class="form-control border-success" id="responsibleSearch" 
+                                           placeholder="Escribe para buscar responsable..." autocomplete="off">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-success" id="searchButton">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Select oculto para el formulario -->
+                                <select class="form-control border-success" name="responsible" id="responsibleSelect" required style="display: none;">
                                     <option value="">Seleccione un responsable...</option>
                                     @foreach($responsibles as $responsible)
                                         <option value="{{ $responsible->id }}">
@@ -254,6 +272,12 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                
+                                <!-- Contenedor para resultados -->
+                                <div id="responsibleResults" class="border border-success rounded bg-white" 
+                                     style="max-height: 200px; overflow-y: auto; display: none; position: absolute; width: 100%; z-index: 1000;">
+                                </div>
+                                
                                 <div class="error-message text-danger" id="responsible_error"></div>
                             </div>
                         </div>
@@ -276,7 +300,6 @@
     </div>
 </div>
 
-
 <!-- Modal para Reporte PDF (Configuración) -->
 <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -290,34 +313,34 @@
                 </button>
             </div>
             <form id="reportForm" action="{{ route('solicitud.report.movements.download') }}" method="POST" target="_blank">
-    @csrf
-    <div class="modal-body">
-        <div class="form-group">
-            <label class="text-success font-weight-bold">Seleccione la fecha del reporte</label>
-            <input type="date" class="form-control border-success" name="report_date" value="{{ date('Y-m-d') }}" required>
-        </div>
-        <div class="form-group">
-            <label class="text-success font-weight-bold">Tipo de Movimiento</label>
-            <select class="form-control border-success" name="report_type">
-                <option value="">Todos los movimientos</option>
-                <option value="Movimiento Entrada">Movimientos Entradas</option>
-                <option value="Movimiento Interno">Movimientos Internos</option>
-            </select>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-outline-success" data-dismiss="modal">
-            <i class="fas fa-times mr-2"></i> Cancelar
-        </button>
-        <button type="submit" class="btn btn-success">
-            <i class="fas fa-file-download mr-2"></i> Descargar PDF
-        </button>
-    </div>
-</form>
-
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="text-success font-weight-bold">Seleccione la fecha del reporte</label>
+                        <input type="date" class="form-control border-success" name="report_date" value="{{ date('Y-m-d') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="text-success font-weight-bold">Tipo de Movimiento</label>
+                        <select class="form-control border-success" name="report_type">
+                            <option value="">Todos los movimientos</option>
+                            <option value="Movimiento Entrada">Movimientos Entradas</option>
+                            <option value="Movimiento Interno">Movimientos Internos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-file-download mr-2"></i> Descargar PDF
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 <style>
 /* Para hacer la paginación verde */
 .pagination .page-item.active .page-link {
@@ -336,11 +359,41 @@
     border-color: #28a745;
     color: white;
 }
+
+#responsibleResults div {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+    transition: background-color 0.2s;
+}
+
+#responsibleResults div:hover {
+    background-color: #f8f9fa;
+}
+
+#responsibleResults div:last-child {
+    border-bottom: none;
+}
 </style>
 
-
 <script>
-document.getElementById('generateReportBtn').addEventListener('click', function() {
+
+    // Silenciar errores de recursos externos y scripts de terceros
+const originalError = console.error;
+console.error = function(...args) {
+    if (typeof args[0] === 'string' && (
+        args[0].includes('integrity') || 
+        args[0].includes('404') ||
+        args[0].includes('getContext') ||
+        args[0].includes('Raphael')
+    )) {
+        return; // Ignorar estos errores específicos
+    }
+    originalError.apply(console, args);
+};
+
+// Función para el reporte PDF
+document.getElementById('generateReportBtn')?.addEventListener('click', function() {
     // Obtener los valores del formulario
     const formData = new FormData(document.getElementById('reportForm'));
     
@@ -387,6 +440,132 @@ document.getElementById('generateReportBtn').addEventListener('click', function(
         }
     });
 });
+
+// ===== FILTRO DE RESPONSABLES =====
+(function() {
+    'use strict';
+    
+    function initResponsibleFilter() {
+        const searchInput = document.getElementById('responsibleSearch');
+        const searchButton = document.getElementById('searchButton');
+        const select = document.getElementById('responsibleSelect');
+        const resultsContainer = document.getElementById('responsibleResults');
+        
+        if (!searchInput || !searchButton || !select || !resultsContainer) {
+            console.log('Elementos no encontrados, reintentando...');
+            setTimeout(initResponsibleFilter, 500);
+            return;
+        }
+        
+        console.log('✅ Filtro de responsables inicializado');
+        
+        // Guardar todas las opciones originales
+        const allOptions = Array.from(select.options);
+        
+        // Función para realizar la búsqueda
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            resultsContainer.innerHTML = '';
+            
+            if (searchTerm === '') {
+                // Si no hay término de búsqueda, mostrar todos
+                showResults(allOptions.filter(option => option.value !== ""));
+                return;
+            }
+            
+            // Filtrar opciones que coincidan
+            const matchedOptions = allOptions.filter(option => 
+                option.value !== "" && option.text.toLowerCase().includes(searchTerm)
+            );
+            
+            if (matchedOptions.length > 0) {
+                showResults(matchedOptions);
+            } else {
+                resultsContainer.innerHTML = '<div class="p-2 text-muted">No se encontraron resultados</div>';
+                resultsContainer.style.display = 'block';
+            }
+        }
+        
+        // Función para mostrar resultados
+        function showResults(options) {
+            resultsContainer.innerHTML = '';
+            
+            options.forEach(option => {
+                const div = document.createElement('div');
+                div.className = 'p-2 border-bottom';
+                div.style.cursor = 'pointer';
+                div.textContent = option.text;
+                
+                div.addEventListener('click', function() {
+                    searchInput.value = option.text;
+                    select.value = option.value;
+                    resultsContainer.style.display = 'none';
+                    
+                    // Limpiar mensaje de error
+                    const errorDiv = document.getElementById('responsible_error');
+                    if (errorDiv) errorDiv.textContent = '';
+                });
+                
+                div.addEventListener('mouseover', function() {
+                    this.style.backgroundColor = '#f8f9fa';
+                });
+                
+                div.addEventListener('mouseout', function() {
+                    this.style.backgroundColor = '';
+                });
+                
+                resultsContainer.appendChild(div);
+            });
+            
+            resultsContainer.style.display = 'block';
+        }
+        
+        // Event listeners
+        searchButton.addEventListener('click', performSearch);
+        
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+        
+        // Ocultar resultados al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchButton.contains(e.target) && !resultsContainer.contains(e.target)) {
+                resultsContainer.style.display = 'none';
+            }
+        });
+        
+        // Validación del formulario
+        const form = document.getElementById('movementForm');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                if (select.value === "") {
+                    e.preventDefault();
+                    const errorDiv = document.getElementById('responsible_error');
+                    if (errorDiv) {
+                        errorDiv.textContent = 'Debe seleccionar un responsable';
+                    }
+                }
+            });
+        }
+    }
+
+    // Inicializar cuando el DOM esté listo
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initResponsibleFilter);
+    } else {
+        setTimeout(initResponsibleFilter, 100);
+    }
+    
+    // También inicializar cuando el modal se muestre
+    if (typeof jQuery !== 'undefined' && jQuery.fn.modal) {
+        jQuery('#newMovementModal').on('shown.bs.modal', function() {
+            setTimeout(initResponsibleFilter, 100);
+        });
+    }
+})();
 </script>
 
 @endsection

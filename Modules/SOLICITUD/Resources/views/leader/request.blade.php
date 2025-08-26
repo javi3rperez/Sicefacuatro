@@ -97,9 +97,10 @@
       font-size: 12px;
       border-radius: 4px;
       margin: 2px;
+      cursor: pointer;
     }
-    .btn-danger { background-color: red; }
-    .btn-secondary { background-color: gray; }
+    .btn-danger { background-color: red; color: white; }
+    .btn-secondary { background-color: gray; color: white; }
   </style>
 
   
@@ -180,24 +181,27 @@
             <th style="width: 10%;">Cantidad solicitada</th>
             <th style="width: 20%;">Cantidad entregada</th>
             <th style="width: 20%;">Observaciones</th>
+            <th style="width: 10%;">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><input type="text" name="sena_code[]" required /></td>
             <td><input type="text" name="item_description[]" required /></td>
+            
             <td><input type="text" name="measurement_unit[]" required /></td>
             <td><input type="text" name="requested_quantity[]" required /></td>
-            <td><input type="text" name="delivered_quantity[]" disabled/></td>
+            <td><input type="text" name="delivered_quantity[]" value="0" readonly /></td>
             <td><input type="text" name="observation[]" /></td>
-            
+            <td>
+              <button type="button" class="btn-small btn-secondary" onclick="agregarFila()">+</button>
+              <button type="button" class="btn-small btn-danger" onclick="eliminarFila(this)">-</button>
+            </td>
           </tr>
         </tbody>
       </table>
 
-
-      <br><br>
-      <br>
+      <br><br><br>
       <div style="text-align: center; margin-top: 20px;">
         <button type="submit">Solicitar</button>
       </div>
@@ -209,7 +213,15 @@
       let tabla = document.getElementById("tabla-bienes").getElementsByTagName('tbody')[0];
       let nuevaFila = tabla.rows[0].cloneNode(true);
 
-      nuevaFila.querySelectorAll("input").forEach(input => input.value = "");
+      // Limpiar inputs
+      nuevaFila.querySelectorAll("input").forEach(input => {
+        if (input.name !== "delivered_quantity[]") {
+          input.value = "";
+        } else {
+          input.value = "0";
+        }
+      });
+
       tabla.appendChild(nuevaFila);
     }
 

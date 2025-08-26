@@ -59,45 +59,63 @@
     }
 </style>
 
-<div class="container">
-    <h2><i class="fas fa-random"></i> Movimientos de Inventario</h2>
-
-    <div class="card">
-        <div class="card-header">
-            <i class="fas fa-list"></i> Registro de Movimientos
+ {{-- Tarjeta de bienvenida --}}
+    <div class="card border-0 shadow-lg rounded mb-5">
+        <div class="card-body text-center py-5">
+            <div class="mb-4">
+                <i class="fas fa-box fa-3x text-primary"></i>
+            </div>
+            <h1 class="display-6 fw-bold">📦 Movimientos de Bienes</h1>
+            <p class="text-muted">Consulta los movimientos relacionados con tus solicitudes de bienes.</p>
         </div>
-        <table>
-            <thead>
-                <tr> 
-                    <th>ID</th>
-                    <th>Tipo de Movimiento</th>
-                    <th>Almacén</th>
-                    <th>Elemento</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($movimientos as $movimiento) 
-                    <tr>
-                        <td>{{ $movimiento->id }}</td>
-                        <td>
-                            <span class="badge">
-                                {{ $movimiento->movementType->name ?? 'Sin tipo' }}
-                            </span>
-                        </td>
-                        <td>{{ $movimiento->request->cost_center_name ?? 'Sin almacén' }}</td>
-                        <td>{{ $movimiento->request->item_description ?? 'Sin elemento' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="empty-message">
-                            <i class="fas fa-info-circle"></i> No hay movimientos registrados
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+    </div>
 
-        </table>
+    {{-- Tabla de movimientos --}}
+    <div class="card border-0 shadow-lg rounded">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Historial de Movimientos</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo de Movimiento</th>
+                            <th>Elemento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($movimientos as $movimiento)
+                            <tr>
+                                <td>{{ $movimiento->id }}</td>
+                                <td>{{ $movimiento->movementType->name ?? 'Sin tipo' }}</td>
+                                <td>
+                                    @forelse($movimiento->request->items as $item)
+                                        <div>- {{ $item->item_description }}</div>
+                                    @empty
+                                        Sin elemento
+                                    @endforelse
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    No hay movimientos registrados.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @if ($movimientos->hasPages())
+            <div class="card-footer d-flex justify-content-center">
+                {{ $movimientos->links() }}
+            </div>
+        @endif
     </div>
 </div>
-
 @endsection
+

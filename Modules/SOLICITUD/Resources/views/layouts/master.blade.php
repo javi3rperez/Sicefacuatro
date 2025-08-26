@@ -189,30 +189,6 @@
                     <p>Historial</p>
                 </a>
             </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                 <i class="nav-icon fas fa-file-alt" style="color: var(--primary-color);"></i>
-                                <p>Reportes almacen</p>
-                            </a>
-                            <ul class="nav nav-treeview" style="margin-left: 20px;">
-                                <li class="nav-item">
-                                    <a href="{{ route('solicitud.store.inventory') }}" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Inventario</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">a</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('solicitud.admin.reports')}}" class="nav-link" style="color: var(--dark-color);">
-                                        <span class="menu-item-text">Reportes</span>
-                                    </a>
-                                </li>
-                                
-                            </ul>
-                        </li>
                     </ul>
                 </nav>
             </div>

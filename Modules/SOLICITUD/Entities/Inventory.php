@@ -22,7 +22,7 @@ class Inventory extends Model
 
     protected static function newFactory()
     {
-        return \Modules\SOLICITUD\Database\factories\InventoryFactory::new();
+        return InventoryFactory::new();
     }
 
     public function element()
@@ -34,4 +34,4 @@ class Inventory extends Model
     {
         return $this->belongsTo(ProductiveUnitWarehouse::class, 'productive_unit_warehouse_id');
     }
-}
+};

@@ -69,12 +69,23 @@ Route::middleware(['lang'])->group(function(){
         // Rutas para reportes PDF
         Route::post('/warehouseman/movement/report', [InventoryController::class, 'generateMovementReport'])->name('solicitud.report.movements');
         Route::post('/warehouseman/movement/report/download', [InventoryController::class, 'downloadMovementReport'])->name('solicitud.report.movements.download');
+        // Detalle de solicitud para warehouseman
+// Ruta para warehouseman
+Route::get('/warehouseman/request/{id}', [ListController::class, 'showWarehouseman'])
+    ->name('solicitud.warehouseman.request');
 
-        //ADMIN CRUD
-        Route::get('/warehouseadmin/list', [ListController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
-        Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
-        Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
-        Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
+
+
+
+         // ADMIN CRUD
+            Route::get('/warehouseadmin/list', [ListController::class, 'list_warehouseadmin'])->name('solicitud.admin.list');
+            Route::get('/warehouseadmin/request/{id}', [ListController::class, 'show'])->name('solicitud.admin.request'); // SOLO LECTURA
+          // Ruta única para actualizar estado (aprobada / rechazada)
+            Route::put('/warehouseadmin/request/{id}', [ListController::class, 'updateStatus'])->name('solicitud.admin.request.updateStatus');
+            Route::get('/warehouseadmin/record', [RecordController::class, 'record_warehouseadmin'])->name('solicitud.admin.record');
+            Route::get('/warehouseadmin/inventory', [InventoryController::class, 'inventory_warehouseadmin'])->name('solicitud.admin.inventory');
+            Route::get('/warehouseadmin/reports', [ReportsController::class, 'reports_warehouseadmin'])->name('solicitud.admin.reports');
+            Route::get('/warehouseadmin/dashboard', [ListController::class, 'adminDashboard'])->name('solicitud.admin.dashboard');
 
             
         //Instructor

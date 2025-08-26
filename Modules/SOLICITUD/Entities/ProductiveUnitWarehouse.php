@@ -12,7 +12,7 @@ class ProductiveUnitWarehouse extends Model
     protected $fillable = [];
     protected static function newFactory()
 {
-    return \Modules\SOLICITUD\Database\factories\ProductiveUnitWarehouseFactory::new();
+    return ProductiveUnitWarehouseFactory::new();
 }
 
 }

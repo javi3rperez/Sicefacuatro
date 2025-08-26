@@ -10,64 +10,114 @@ use Modules\SOLICITUD\Entities\Request as Solicitud;
 
 class ListController extends Controller
 {
+    // ----------------------------------------------------------------
+    // LISTADOS
+    // ----------------------------------------------------------------
+
     /**
-     * Display a listing of the resource.
-     * @return Renderable
+     * Listado de solicitudes aprobadas para el almacenista, con filtros por fecha y nombre.
      */
-
-
-    // Agrega el parámetro Request $request aquí
     public function list_warehouseman(Request $request)
     {
-        $query = Solicitud::with(['person', 'productiveUnitWarehouse', 'movementType'])
-            ->where('status', 'approved') // Solo aprobadas
-            ->orderBy('required_date', 'desc');
-        
-        if ($request->has('priority') && $request->priority != '') {
-            $query->where('priority', $request->priority);
-        }
-        
-        if ($request->has('date') && $request->date != '') {
+        $query = Solicitud::query()
+            ->select(['id','accountable_name','request_date','status'])
+            ->where('status', 'Approved') // Solo solicitudes aprobadas
+            ->orderBy('request_date', 'desc');
+
+        // Filtro por fecha
+        if ($request->filled('date')) {
             $query->whereDate('request_date', $request->date);
         }
-        
-        $list = $query->get();
 
-        return view('solicitud::warehouseman.list_store', compact('list'));
-    }
-    
-public function list_warehouseadmin(Request $request)
-{
-    $query = Solicitud::query()
-                ->select([
-                    'id',
-                    'name',
-                    'program',
-                    'created_at'
-                ])
-                ->orderBy('created_at', 'desc');
+        // Filtro por nombre
+        if ($request->filled('name')) {
+            $query->where('accountable_name', 'like', '%'.$request->name.'%');
+        }
 
-    // Filtro por fecha
-    if ($request->filled('fecha')) {
-        $query->whereDate('created_at', $request->fecha);
+        // Paginación
+        $list = $query->paginate(10);
+
+        return view('solicitud::warehouseman.List_store', [
+            'list' => $list,
+            'date_selected' => $request->date,
+            'name_selected' => $request->name
+        ]);
     }
 
-    // Filtro por nombre 
-    if ($request->filled('nombre')) {
-        $query->where('name', 'like', '%'.$request->nombre.'%');
-    }
-
-    $list = $query->paginate(10);
-
-    return view('solicitud::warehouseadmin.list_admin', [
-        'list' => $list,
-        'fecha_seleccionada' => $request->fecha,
-        'nombre_seleccionado' => $request->nombre
-    ]);
-}
     /**
-     * Show the form for creating a new resource.
-     * @return Renderable
+     * Muestra el detalle de una solicitud para el almacenista.
+     */
+    public function showWarehouseman($id)
+    {
+        $solicitud = Solicitud::with('items')->findOrFail($id);
+
+        return view('solicitud::warehouseman.request_store', compact('solicitud'));
+    }
+
+    /**
+     * Listado de solicitudes para el administrador de almacén, con filtros por fecha y nombre.
+     */
+    public function list_warehouseadmin(Request $request)
+    {
+        $query = Solicitud::query()
+            ->select(['id','accountable_name','request_date','status'])
+            ->orderBy('request_date', 'desc');
+
+        // Filtro por fecha
+        if ($request->filled('fecha')) {
+            $query->whereDate('request_date', $request->fecha);
+        }
+
+        // Filtro por nombre
+        if ($request->filled('nombre')) {
+            $query->where('accountable_name', 'like', '%'.$request->nombre.'%');
+        }
+
+        $list = $query->paginate(10);
+
+        return view('solicitud::warehouseadmin.list_admin', [
+            'list' => $list,
+            'fecha_seleccionada' => $request->fecha,
+            'nombre_seleccionado' => $request->nombre
+        ]);
+    }
+
+    /**
+     * Listado de solicitudes aprobadas para el almacenista, con filtro por fecha exacta.
+     */
+    public function list_store(Request $request)
+    {
+        $query = Solicitud::select(
+            'id',
+            'accountable_name',
+            'request_date',
+            'status',
+            'approved_by_name'
+        )
+        ->with(['items' => function ($q) {
+            $q->select('id', 'request_id', 'observation');
+        }])
+        ->where('status', 'approved');
+
+        // Filtro por fecha exacta
+        if ($request->filled('date')) {
+            $query->whereDate('request_date', $request->date);
+        }
+
+        $solicitudes = $query->orderBy('request_date', 'desc')->paginate(10);
+
+        return view('solicitud::warehouseman.list_store', [
+            'solicitudes' => $solicitudes,
+            'date_selected' => $request->date
+        ]);
+    }
+
+    // ----------------------------------------------------------------
+    // CRUD
+    // ----------------------------------------------------------------
+
+    /**
+     * Muestra el formulario de creación de solicitud.
      */
     public function create()
     {
@@ -75,9 +125,7 @@ public function list_warehouseadmin(Request $request)
     }
 
     /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Renderable
+     * Almacena una nueva solicitud (no implementado).
      */
     public function store(Request $request)
     {
@@ -85,40 +133,88 @@ public function list_warehouseadmin(Request $request)
     }
 
     /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Renderable
+     * Muestra el detalle de una solicitud para el administrador de almacén.
      */
     public function show($id)
     {
-        return view('solicitud::show');
+        $solicitud = Solicitud::with(['person', 'movementType', 'items'])
+                        ->findOrFail($id);
+
+        return view('solicitud::warehouseadmin.request_admin', compact('solicitud'));
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Renderable
+     * Muestra el formulario de edición de solicitud.
      */
     public function edit($id)
     {
         return view('solicitud::edit');
     }
 
+    // ----------------------------------------------------------------
+    // UPDATE STATUS (aprobación/rechazo con firma)
+    // ----------------------------------------------------------------
+
     /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Renderable
+     * Actualiza el estado de una solicitud (aprobación o rechazo), guarda firma y observaciones.
      */
-    public function update(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
-        //
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'observation' => 'nullable|string|max:500',
+            'observations' => 'array',
+            'observations.*' => 'nullable|string|max:500',
+            'signature_name' => 'nullable|string|max:255',
+            'signature_role' => 'nullable|string|max:255',
+        ]);
+
+        $solicitud = Solicitud::with('items')->findOrFail($id);
+
+        // Actualiza el estado de la solicitud
+        $solicitud->status = $request->status;
+
+        if ($request->status === 'rejected') {
+            // Si es rechazado: no hay aprobador del sistema
+            $solicitud->approved_by = null;
+            $solicitud->approved_by_name = null;
+        } else {
+            // Si es aprobado: guardar usuario autenticado como aprobador
+            $user = auth()->user();
+            $solicitud->approved_by = $user->id ?? null;
+            $solicitud->approved_by_name = $user->name ?? 'Administrador';
+        }
+
+        // En ambos casos se guardan los campos de firma (nombre y cargo)
+        $solicitud->signature_name = $request->input('signature_name');
+        $solicitud->signature_role = $request->input('signature_role');
+
+        $solicitud->updated_by = auth()->id();
+        $solicitud->save();
+
+        // Guardar observaciones individuales por ítem
+        if ($request->has('observations')) {
+            foreach ($request->input('observations', []) as $itemId => $obs) {
+                if ($item = $solicitud->items()->where('id', $itemId)->first()) {
+                    $item->update(['observation' => $obs ?: null]);
+                }
+            }
+        }
+
+        // Aplicar observación global si viene
+        if ($request->filled('observation')) {
+            foreach ($solicitud->items as $item) {
+                $item->update(['observation' => $request->observation]);
+            }
+        }
+
+        return redirect()
+            ->route('solicitud.admin.record')
+            ->with('success', 'La solicitud fue ' . ($request->status == 'approved' ? 'aprobada' : 'rechazada') . ' correctamente.');
     }
 
     /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Renderable
+     * Elimina una solicitud (no implementado).
      */
     public function destroy($id)
     {

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\SOLICITUD\Entities\Evidence;
 use Illuminate\Support\Facades\DB;
-use Modules\SOLICITUD\Entities\Category;
 use Modules\SICA\Entities\Category;
 use Modules\SICA\Entities\Element;
 use Illuminate\Support\Facades\Auth;
@@ -56,9 +55,6 @@ public function evidence_warehouseman(Request $request)
     {
         return view('solicitud::create');
     }
-
-
-
     /**
      * Store a newly created resource in storage.
      * @param Request $request
@@ -72,42 +68,44 @@ public function evidence_warehouseman(Request $request)
         'element_id' => 'required|exists:elements,id',
         'movement_type' => 'required|in:entry,exit',
         'amount' => 'required|integer|min:1',
-        'evidence' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'evidence' => 'required|file|mimes:jpeg,png,jpg,gif,pdf|max:2048', //PERMITIR SOLO IMÁGENES Y PDF
         'comments' => 'nullable|string|max:500',
     ]);
 
-    try {
-        // Procesar la imagen
-        $imagePath = null;
+   try {
+        // 1) Guardar archivo en storage/app/public/evidences y obtener la ruta relativa
+        // Inicializa la variable de ruta del archivo
+        $filePath = null;
+        // Si se subió un archivo de evidencia, lo almacena en la carpeta 'evidences' del disco 'public'
         if ($request->hasFile('evidence')) {
-            $image = $request->file('evidence');
-            $imageName = time() . '_' . $image->getClientOriginalName();
-            $imagePath = $image->storeAs('evidences', $imageName, 'public');
+            $file = $request->file('evidence');
+            $fileName = time().'_'.$file->getClientOriginalName();
+            $filePath = $file->storeAs('evidences', $fileName, 'public'); // Ejemplo: "evidences/1699999999_archivo.png"
         }
 
-        // Obtener el nombre del elemento
+        // 2) Obtener nombre del elemento
+        // Busca el elemento relacionado usando el ID proporcionado
         $element = Element::find($request->element_id);
 
-        // Obtener información del usuario autenticado
-        $user = Auth::user();
-
-        // Crear la evidencia sin el campo user_id que no existe en la tabla
+        // 3) Crear registro
+        // Crea un nuevo registro de evidencia en la base de datos con los datos proporcionados y la ruta del archivo
         Evidence::create([
-            'category_id' => $request->category_id,
-            'element_id' => $request->element_id,
+            'category_id'   => $request->category_id,
+            'element_id'    => $request->element_id,
             'movement_type' => $request->movement_type,
-            'quantity' => $request->amount,
-            'evidence_path' => $imagePath,
-            'comments' => $request->comments,
-            'product_name' => $element->name,
-            'created_at' => now(),
-            'updated_at' => now(),
+            'quantity'      => $request->amount,
+            'evidence_path' => $filePath, // Guarda la ruta del archivo subido
+            'comments'      => $request->comments,
+            'product_name'  => optional($element)->name, // Guarda el nombre del elemento si existe
         ]);
 
+
+        // Redirige a la ruta de evidencia con mensaje de éxito
         return redirect()->route('solicitud.store.evidence')
             ->with('success', 'Evidencia guardada exitosamente.');
 
     } catch (\Exception $e) {
+        // Si ocurre un error, regresa a la página anterior con mensaje de error y mantiene los datos ingresados
         return redirect()->back()
             ->with('error', 'Error al guardar la evidencia: ' . $e->getMessage())
             ->withInput();
@@ -153,4 +151,4 @@ public function evidence_warehouseman(Request $request)
     {
         //
     }
-}
+};

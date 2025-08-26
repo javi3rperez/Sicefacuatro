@@ -13,39 +13,60 @@ class Request extends Model
 {
     use HasFactory;
 
-    protected $table = 'requests'; 
-
     protected $fillable = [
-    'person_id',
-    'request_date' => 'date',
-    'status' => 'pending', 
+     'request_date',
     'mba_area',
     'regional_code',
     'regional_name',
     'cost_center_code',
     'cost_center_name',
     'office_manager_name',
-    'accountable_type',  
+    'accountable_type',
     'accountable_number',
     'destinations_requested_goods',
-    'group_or_record_code',
-    'movement_type_id', 
-    'sena_code',
-    'item_description',
-    'requested_quantity',
-    'delivered_quantity',
-    'observation',
-
+    'group_or_record_code',   
+    'person_id',
+    'movement_type_id',
+    'status',
+    'productive_unit_warehouse_id',
+    'signature_name',
+    'signature_role'
     ];
-    
-    
+
+    /**
+     * Relación con persona solicitante.
+     */
     public function person()
     {
         return $this->belongsTo(Person::class, 'person_id');
     }
 
+    /**
+     * Relación con movimientos.
+     */
     public function movements()
     {
         return $this->hasMany(Movement::class, 'request_id');
+    }
+
+    /**
+     * Relación con la bodega/productive unit.
+     */
+    public function productiveUnitWarehouse()
+    {
+        return $this->belongsTo(ProductiveUnitWarehouse::class, 'productive_unit_warehouse_id');
+    }
+
+    /**
+     * Relación con el tipo de movimiento.
+     */
+    public function movementType()
+    {
+        return $this->belongsTo(MovementType::class, 'movement_type_id');
+    }
+
+     public function items()
+    {
+        return $this->hasMany(RequestItem::class, 'request_id');
     }
 }

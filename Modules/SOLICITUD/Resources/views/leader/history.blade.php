@@ -121,6 +121,7 @@
 
 <div class="container-xl-custom">
     <div class="card-elevated">
+        <!-- Encabezado con filtro -->
         <div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
             <h2 class="title-section mb-3 mb-md-0">Historial de Solicitudes</h2>
             <form method="GET" action="{{ route('solicitud.leader.index') }}">
@@ -128,11 +129,13 @@
                     <option value="">Todos los estados</option>
                     <option value="approved" {{ request('estado') == 'approved' ? 'selected' : '' }}>Aceptadas</option>
                     <option value="rejected" {{ request('estado') == 'rejected' ? 'selected' : '' }}>Rechazadas</option>
-                    <option value="pending" {{ request('estado') == 'pending' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="pending"  {{ request('estado') == 'pending' ? 'selected' : '' }}>Pendientes</option>
+                    <option value="completed" {{ request('estado') == 'completed' ? 'selected' : '' }}>Completadas</option>
                 </select>
             </form>
         </div>
 
+        <!-- Tabla -->
         <div class="table-responsive">
             <table class="table table-custom">
                 <thead>
@@ -147,29 +150,38 @@
                 <tbody>
                     @forelse($solicitudes as $solicitud)
                         @php
-                            // Mapa de traducción y clase de badge
                             $estados = [
-                                'pending'  => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
-                                'approved' => ['texto' => 'Aceptada', 'clase' => 'aceptada'],
-                                'rejected' => ['texto' => 'Rechazada', 'clase' => 'rechazada'],
-                                'completed'=> ['texto' => 'Completada', 'clase' => 'aceptada'],
+                                'pending'   => ['texto' => 'Pendiente', 'clase' => 'pendiente'],
+                                'approved'  => ['texto' => 'Aceptada',  'clase' => 'aceptada'],
+                                'rejected'  => ['texto' => 'Rechazada', 'clase' => 'rechazada'],
+                                'completed' => ['texto' => 'Completada','clase' => 'aceptada'],
                             ];
 
                             $estadoTexto = $estados[$solicitud->status]['texto'] ?? ucfirst($solicitud->status);
                             $estadoClase = $estados[$solicitud->status]['clase'] ?? 'pendiente';
                         @endphp
+
                         <tr>
                             <td>{{ $solicitud->id }}</td>
-                            <td>{{ $solicitud->observation }}</td>
-                            <td>{{ \Carbon\Carbon::parse($solicitud->request_date)->format('d/m/Y') }}</td>
+                            <td>
+                                @if($solicitud->items && $solicitud->items->count() > 0)
+                                    @foreach($solicitud->items as $item)
+                                        <div>- {{ $item->item_description }}</div>
+                                    @endforeach
+                                @else
+                                    <div class="text-muted fst-italic">Sin detalle</div>
+                                @endif
+                            </td>
+                            <td>
+                                {{ \Carbon\Carbon::parse($solicitud->request_date)->format('d/m/Y') }}
+                            </td>
                             <td>
                                 <span class="text-dark badge-{{ $estadoClase }}">
                                     {{ $estadoTexto }}
                                 </span>
                             </td>
-                            
                             <td>
-                                <form action="{{ route('solicitud.leader.destroy', $solicitud->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar esta solicitud?')">
+                                <form action="{{ route('solicitud.instructor.destroy', $solicitud->id) }}" method="POST" class="d-inline" onsubmit="return confirm('¿Eliminar esta solicitud?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn-action text-danger" title="Eliminar">

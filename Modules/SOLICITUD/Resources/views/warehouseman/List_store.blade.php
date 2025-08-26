@@ -9,19 +9,19 @@
         </h2>
         
         <form method="GET" action="{{ route('solicitud.store.list') }}" class="d-flex">
-            <div class="p-2 border-b mr-2">
-                <label class="block text-gray-700 text-sm font-medium mb-1">Prioridad</label>
-                <select name="priority" class="w-full p-2 border rounded" onchange="this.form.submit()">
-                    <option value="">Todas las prioridades</option>
-                    <option value="high" {{ request('priority') == 'high' ? 'selected' : '' }}>Alta</option>
-                    <option value="medium" {{ request('priority') == 'medium' ? 'selected' : '' }}>Media</option>
-                    <option value="low" {{ request('priority') == 'low' ? 'selected' : '' }}>Baja</option>
-                </select>
+            <div class="p-2">
+                <label class="block text-gray-700 text-sm font-medium mb-1">Solicitante</label>
+                <input type="text" name="name" value="{{ request('name') }}" class="w-full p-2 border rounded" placeholder="Buscar por nombre">
             </div>
-            <div class="p-2 border-b">
+            <div class="p-2">
                 <label class="block text-gray-700 text-sm font-medium mb-1">Fecha</label>
-                <input type="date" name="date" class="w-full p-2 border rounded" 
-                       value="{{ request('date') }}" onchange="this.form.submit()">
+                <input type="date" name="date" value="{{ request('date') }}" class="w-full p-2 border rounded">
+            </div>
+            <div class="p-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-filter"></i> Filtrar
+                </button>
+                <a href="{{ route('solicitud.store.list') }}" class="btn btn-secondary ml-2">Limpiar</a>
             </div>
         </form>
     </div>
@@ -44,47 +44,59 @@
                 <tr>
                     <th class="py-3 align-middle">ID</th>
                     <th class="py-3 align-middle">Solicitante</th>
-                    <th class="py-3 align-middle">Fecha Solicitud</th>
-                    <th class="py-3 align-middle">Fecha Requerida</th>
-                    <th class="py-3 align-middle">Prioridad</th>
-                    <th class="py-3 align-middle">Estado</th>
-                    <th class="py-3 align-middle">Acciones</th>                
+                    <th class="py-3 align-middle border-0 font-weight-light">Fecha/Hora</th>
+                    <th class="py-3 align-middle border-0 font-weight-light">Estado</th>
+                    <th class="py-3 align-middle border-0 font-weight-light text-center">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($list as $item)
                     <tr class="border-bottom">
-                        <td class="align-middle font-weight-bold">{{ $item->id }}</td>
+                        <td class="px-4 py-2 font-weight-bold text-dark">{{ $item->id }}</td>
                         <td class="align-middle">
-                            {{ $item->person->name ?? 'N/A' }}
+                            <div class="d-flex align-items-center">
+                                <div class="icon-circle bg-light-success mr-3">
+                                    <i class="fas fa-user text-success"></i>
+                                </div>
+                                <span>{{ $item->accountable_name ?? 'N/A' }}</span>
+                            </div>
                         </td>
                         <td class="align-middle">
-                            {{ $item->request_date->format('d/m/Y H:i') }}
+                            <div class="d-flex align-items-center">
+                                <div class="icon-circle bg-light-primary mr-3">
+                                    <i class="fas fa-calendar-alt text-primary"></i>
+                                </div>
+                                <span>{{ $item->request_date }}</span>
+                            </div>
                         </td>
                         <td class="align-middle">
-                            {{ $item->required_date->format('d/m/Y') }}
+                            <div class="d-flex align-items-center">
+                                <div class="icon-circle bg-light-primary mr-3">
+                                    <i class="fas fa-info-circle text-primary"></i>
+                                </div>
+                                <span class="badge 
+                                    @if($item->status == 'approved') badge-success
+                                    @elseif($item->status == 'rejected') badge-danger
+                                    @elseif($item->status == 'completed') badge-primary
+                                    @else badge-warning @endif">
+                                    {{ ucfirst($item->status) }}
+                                </span>
+                            </div>
                         </td>
-                        <td class="align-middle">
-                            @if($item->priority == 'high')
-                                <span class="badge badge-danger">Alta</span>
-                            @elseif($item->priority == 'medium')
-                                <span class="badge badge-warning">Media</span>
-                            @else
-                                <span class="badge badge-success">Baja</span>
-                            @endif
+                        <td class="align-middle text-center">
+                            <a href="{{ route('solicitud.warehouseman.request', $item->id) }}" 
+                               class="btn btn-primary btn-sm d-block mx-auto">
+                                <i class="fas fa-eye"></i> Ver
+                            </a>    
                         </td>
-                        <td class="align-middle">
-                            <span class="badge badge-success">Aprobado</span>
-                        </td>
-                        <td class="align-middle">
-                            <a href="#" class="btn btn-sm btn-info" title="Ver">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                        </td> 
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center py-4">No hay solicitudes aprobadas.</td>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            <i class="fas fa-inbox fa-2x mb-2"></i>
+                            <br>
+                            No se encontraron solicitudes
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

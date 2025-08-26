@@ -113,4 +113,4 @@ class Evidence extends Model
     {
         return \Modules\SOLICITUD\Database\factories\EvidenceFactory::new();
     }
-}
+};

@@ -79,15 +79,25 @@
                                     <span class="badge badge-warning">Salida</span>
                                 @endif
                             </td>
-                            <td class="py-2">
-                                @if($item->evidence_path)
-                                <a href="{{ asset('storage/'.$item->evidence_path) }}" target="_blank" class="btn btn-sm btn-outline-success">
-                                    <i class="fas fa-eye mr-1"></i> Ver
-                                </a>
-                                @else
-                                <span class="text-muted">Sin evidencia</span>
-                                @endif
-                            </td>
+<td>
+    @if($item->evidence_path)
+        @if(Str::endsWith($item->evidence_path, ['.jpg', '.jpeg', '.png', '.gif']))
+            <img src="{{ asset('storage/'.$item->evidence_path) }}" alt="Evidencia" class="img-thumbnail" width="120">
+        @elseif(Str::endsWith($item->evidence_path, '.pdf'))
+            <a href="{{ asset('storage/'.$item->evidence_path) }}" target="_blank" class="btn btn-sm btn-outline-danger">
+                <i class="fas fa-file-pdf"></i> Ver PDF
+            </a>
+        @else
+            <a href="{{ asset('storage/'.$item->evidence_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                <i class="fas fa-download"></i> Descargar
+            </a>
+        @endif
+    @else
+        <span class="text-muted">Sin evidencia</span>
+    @endif
+</td>
+
+
                             <td class="py-2">{{ $item->comments ?? 'Ninguno' }}</td>
 
                             <td class="align-middle text-center">
@@ -116,6 +126,30 @@
         </div>
     </div>
 </div>
+<!-- Modal para Ver Evidencia -->
+<div class="modal fade" id="viewEvidenceModal" tabindex="-1" role="dialog" aria-labelledby="viewEvidenceModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content border-success">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title" id="viewEvidenceModalLabel">
+          <i class="fas fa-image mr-2"></i> Evidencia
+        </h5>
+        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="evidenceImage" src="" alt="Evidencia" class="img-fluid rounded shadow">
+        <div class="mt-3">
+          <a id="downloadEvidence" href="#" download class="btn btn-outline-success">
+            <i class="fas fa-download mr-1"></i> Descargar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Modal para Agregar Evidencia -->
 <div class="modal fade" id="addEvidenceModal" tabindex="-1" role="dialog" aria-labelledby="addEvidenceModalLabel" aria-hidden="true">
@@ -170,12 +204,11 @@
                             <div class="form-group">
                                 <label class="text-success">Tipo de Movimiento</label>
                                 <select class="form-control border-success" id="movement_type" name="movement_type" required>
-                                    <option value="">Seleccione un tipo</option>
-                                    <option value="entry">Entrada</option>
-                                    <option value="exit">Salida</option>
+                                    <option value="exit" selected>Salida</option>
                                 </select>
                             </div>
                         </div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="text-success">Evidencia (Imagen)</label>
@@ -343,6 +376,19 @@ $(document).ready(function() {
     $('.custom-file-input').on('change', function() {
         let fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    });
+    $(document).ready(function() {
+    // Mostrar nombre de archivo en input file
+    $('.custom-file-input').on('change', function() {
+        let fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').addClass("selected").html(fileName);
+    });
+
+    // Cargar imagen en el modal al dar click en "Ver"
+    $('.view-evidence-btn').on('click', function() {
+        let imgSrc = $(this).data('img');
+        $('#evidenceImage').attr('src', imgSrc);
+        $('#downloadEvidence').attr('href', imgSrc);
     });
 });
 </script>

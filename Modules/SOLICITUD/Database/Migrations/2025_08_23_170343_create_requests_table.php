@@ -7,24 +7,30 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-    { 
+    {
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             
             // Claves foráneas
             $table->foreignId('person_id')->constrained('people')->onDelete('cascade');
-            $table->foreignId('productive_unit_warehouse_id')->constrained('productive_unit_warehouses')->onDelete('cascade');
+
+            
+            $table->foreignId('productive_unit_warehouse_id')
+                  ->nullable()
+                  ->constrained('productive_unit_warehouses')
+                  ->onDelete('cascade');
+
             $table->foreignId('movement_type_id')->constrained('movement_types')->onDelete('cascade');
             
-            // Fechas
-            $table->date('request_date'); 
+            // Campos de fechas
+            $table->date('request_date');
             $table->date('required_date');
             
-            // Estado y prioridad
+            // Campos de estado y prioridad
             $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
             $table->enum('status', ['pending', 'approved', 'rejected', 'completed'])->default('pending');
             
-            // Información organizacional
+            // Campos de información organizacional
             $table->string('mba_area', 100);
             $table->string('regional_code', 20);
             $table->string('regional_name', 100);
@@ -32,33 +38,30 @@ return new class extends Migration
             $table->string('cost_center_name', 100);
             $table->string('office_manager_name', 100);
             
-            // Cuentadante
+            // Campos de cuentadante
             $table->enum('accountable_type', ['unipersonal', 'multiple']);
+            $table->string('accountable_name', 100);
             $table->string('accountable_number', 50);
             
-            // Destino
+            // Campos de destino
             $table->text('destinations_requested_goods');
             
-            // Bienes
-            $table->string('group_or_record_code', 50);
-            $table->string('sena_code', 50);
-            $table->text('item_description');
-            $table->string('measurement_unit', 20);
-            
-            // Cantidades
-            $table->decimal('requested_quantity', 10, 2);
-            $table->decimal('delivered_quantity', 10, 2)->default(0);
-            
-            // Observaciones
-            $table->text('observation')->nullable();
+            // Campos de firma
+            $table->string('signature_name', 100)->nullable();
+            $table->string('signature_role', 100)->nullable();
+            $table->string('signature_path')->nullable();
             
             // Auditoría
-            $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
-            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('cascade');
+
+            // 🔹 Nuevos campos de aprobación
+            $table->foreignId('approved_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->string('approved_by_name', 100)->nullable();
             
-            // Control de borrado y tiempos
-            $table->softDeletes();
-            $table->timestamps();
+            // Timestamps
+            $table->softDeletes(); // deleted_at
+            $table->timestamps();  // created_at y updated_at
         });
     }
 

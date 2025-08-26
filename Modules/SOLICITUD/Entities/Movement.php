@@ -1,36 +1,60 @@
 <?php
-<<<<<<< HEAD
+
 namespace Modules\SOLICITUD\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\SICA\Entities\Element;
 use Modules\SICA\Entities\Warehouse;
 
 class Movement extends Model
 {
+    use HasFactory;
+
+    protected $table = 'movements';
+
     protected $fillable = [
         'type',
         'quantity',
         'warehouse_id',
-        'element_id'
+        'element_id',
+        'registration_date',
+        'return_date',
+        'movement_type_id',
+        'voucher_number',
+        'observation',
+        'state',
+        'request_id',
     ];
 
-    // Relación con ubicación (almacén)
+    // Relación con almacén
     public function warehouse()
     {
         return $this->belongsTo(Warehouse::class);
     }
 
-    // Relación con producto (element)
+    // Relación con elemento
     public function element()
     {
         return $this->belongsTo(Element::class);
     }
 
-    // Accesor para categoría (a través de element)
+    // Relación con solicitud
+    public function request()
+    {
+        return $this->belongsTo(Request::class, 'request_id');
+    }
+
+    // Relación con tipo de movimiento
+    public function movementType()
+    {
+        return $this->belongsTo(MovementType::class, 'movement_type_id');
+    }
+
+    // Accesor para categoría (desde element)
     public function getCategoryAttribute()
     {
-        return $this->element->category;
+        return $this->element?->category;
     }
 
     // Scope para entradas
@@ -45,37 +69,3 @@ class Movement extends Model
         return $query->where('type', 'exit');
     }
 }
-=======
-
-namespace Modules\SOLICITUD\Entities;
-
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-
-class Movement extends Model
-{
-    use HasFactory;
-
-    protected $table = 'movements';
-
-    protected $fillable = [
-        'registration_date',
-        'return_date',
-        'movement_type_id',
-        'voucher_number',
-        'observation',
-        'state',
-        'request_id',
-    ];
-
-    public function request()
-    {
-        return $this->belongsTo(Request::class, 'request_id');
-    }
-
-    public function movementType()
-    {
-        return $this->belongsTo(MovementType::class, 'movement_type_id');
-    }
-}
->>>>>>> 749a542d12a928fdf8f651fc7497f895bef4991b

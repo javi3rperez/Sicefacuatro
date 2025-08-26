@@ -14,6 +14,8 @@ use Modules\SICA\Entities\Inventory;
 use Modules\SICA\Entities\Element;
 use Modules\SICA\Entities\Movement;
 use Barryvdh\DomPDF\Facade\Pdf; 
+use Modules\SICA\Entities\MovementDetail;
+use Modules\SICA\Entities\MovementResponsibility;
 
 use Exception;
 
@@ -148,22 +150,25 @@ class InventoryController extends Controller
         ]);
 
         try {
+            // Intenta crear un nuevo registro de inventario con los datos validados
             $inventory = Inventory::create([
-                'person_id' => auth()->id(),
-                'productive_unit_warehouse_id' => $validatedData['productive_unit_warehouse_id'],
-                'element_id' => $validatedData['element_id'],
-                'destination' => $validatedData['destination'],
-                'description' => $validatedData['description'] ?? null,
-                'price' => $validatedData['price'],
-                'amount' => $validatedData['amount'], // 👈 CORREGIDO
-                'stock' => $validatedData['stock'],
-                'state' => $validatedData['state'],
+                'person_id' => auth()->id(), // ID del usuario autenticado
+                'productive_unit_warehouse_id' => $validatedData['productive_unit_warehouse_id'], // ID de la unidad productiva-almacén
+                'element_id' => $validatedData['element_id'], // ID del elemento/producto
+                'destination' => $validatedData['destination'], // Destino (Producción o Formación)
+                'description' => $validatedData['description'] ?? null, // Descripción opcional
+                'price' => $validatedData['price'], // Precio del producto
+                'amount' => $validatedData['amount'], // Cantidad ingresada
+                'stock' => $validatedData['stock'], // Stock disponible
+                'state' => $validatedData['state'], // Estado (Disponible o No disponible)
             ]);
 
+            // Redirige a la ruta de inventario con mensaje de éxito
             return redirect()->route('solicitud.store.inventory')
                 ->with('success', 'Producto creado exitosamente');
 
         } catch (\Exception $e) {
+            // Si ocurre un error, lo registra en el log y retorna con mensaje de error
             Log::error('Error al crear inventario: ' . $e->getMessage());
             return back()->withInput()
                 ->with('error', 'Error al crear: '.$e->getMessage());
@@ -273,109 +278,54 @@ class InventoryController extends Controller
         return view('solicitud::warehouseman.movements_store', compact('movements', 'elements', 'responsibles'));
     }
 
-        public function movement_salida_entrada(Request $request)
+    public function movement_salida_entrada(Request $request)
         {
+        DB::beginTransaction();
+
         try {
-            DB::beginTransaction();
-
-            // Validar los datos - CAMBIA LOS VALORES PERMITIDOS
-            $request->validate([
-                'movement_type' => 'required|in:Movimiento Entrada,Movimiento Interno', // ← CAMBIADO
-                'element_id' => 'required|exists:elements,id',
-                'amount' => 'required|integer|min:1',
-                'registration_date' => 'required|date',
-                'responsible' => 'required|exists:people,id',
-            ]);
-
-            // Determinar el ID del tipo de movimiento (ya debería existir en la BD)
-            $movementTypeId = DB::table('movement_types')
-                ->where('name', $request->movement_type)
-                ->value('id');
-
-            if (!$movementTypeId) {
-                throw new \Exception('Tipo de movimiento no válido');
-            }
-
-            // Crear el movimiento
-            $movementId = DB::table('movements')->insertGetId([
-                'movement_type_id' => $movementTypeId,
+            // ⿡ Guardar en movements
+            $movement = Movement::create([
                 'registration_date' => $request->registration_date,
-                'return_date' => $request->return_date,
-                'observation' => $request->observation,
-                'state' => 'Pendiente',
-                'created_at' => now(),
-                'updated_at' => now(),
+                'movement_type_id' => $request->movement_type,  // ej. Movimiento Entrada
+                'voucher_number'   => 0, // o genera consecutivo
+                'price'            => 0,   // si aplica
+                'observation'      => substr($request->observation, 0, 256),
+                'state'            => 'Aprobado', // agregar formulario
             ]);
 
-            // Obtener el inventory_id para el elemento
-            $inventory = DB::table('inventories')
-                ->where('element_id', $request->element_id)
-                ->first();
-
-            if (!$inventory) {
-                // Si no existe inventario, crear uno
-                $inventoryId = DB::table('inventories')->insertGetId([
-                    'element_id' => $request->element_id,
-                    'quantity' => 0,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            } else {
-                $inventoryId = $inventory->id;
-            }
-
-            // Crear el detalle del movimiento
-            DB::table('movement_details')->insert([
-                'movement_id' => $movementId,
-                'inventory_id' => $inventoryId,
-                'amount' => $request->amount,
-                'created_at' => now(),
-                'updated_at' => now(),
+            // ⿢ Guardar en movement_details
+            MovementDetail::create([
+                'inventory_id' => $request->element_id,
+                'amount'       => $request->amount,
+                'price'=> '5000',//agregar formulario
+                'created_at'   => now(),
+                'updated_at'   => now(),
+                'movement_id'  => $movement->id, // 🔑 relacionar
             ]);
 
-            // Asignar responsable
-            DB::table('movement_responsibilities')->insert([
-                'movement_id' => $movementId,
-                'person_id' => $request->responsible,
-                'created_at' => now(),
-                'updated_at' => now(),
+            // ⿣ Guardar en movement_responsibilities
+            MovementResponsibility::create([
+                'movement_id' => $movement->id,
+                'person_id'   => $request->responsible,
+                'role'        => 'REGISTRO', // agregar formulario ejemplo, puedes setear dinámico
+                'date'        => Carbon::now(),
+                'created_at'  => now(),
             ]);
-
-            // Actualizar el inventario según el tipo de movimiento - CAMBIA LA LÓGICA
-            if ($request->movement_type == 'Movimiento Entrada') {
-                DB::table('inventories')
-                    ->where('id', $inventoryId)
-                    ->increment('quantity', $request->amount);
-            } else if ($request->movement_type == 'Movimiento Interno') {
-                // Verificar que haya suficiente stock antes de restar
-                $currentQuantity = DB::table('inventories')
-                    ->where('id', $inventoryId)
-                    ->value('quantity');
-
-                if ($currentQuantity < $request->amount) {
-                    throw new \Exception('No hay suficiente stock para realizar este movimiento interno');
-                }
-
-                DB::table('inventories')
-                    ->where('id', $inventoryId)
-                    ->decrement('quantity', $request->amount);
-            }
 
             DB::commit();
 
             return redirect()->route('solicitud.store.movements')
-                ->with('success', 'Movimiento de ' . $request->movement_type . ' registrado exitosamente');
-
+                ->with('success', 'Movimiento creado exitosamente');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back()
-                ->with('error', 'Error al registrar el movimiento: ' . $e->getMessage())
-                ->withInput();
-        }
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al registrar movimiento',
+                'error'   => $e->getMessage()
+            ], 500);}
     }
 
     //documento pdf
-
     public function generateMovementReport(Request $request)
     {
         // Validar la fecha del reporte
@@ -428,9 +378,7 @@ class InventoryController extends Controller
             'totalGeneral' => $totalEntradas + $totalInternos
         ]);
     }
-
-
-
+    //descargar pdf
     public function downloadMovementReport(Request $request)
     {
         $request->validate([
